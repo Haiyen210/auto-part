@@ -1,13 +1,10 @@
 <template>
     <div class="main-container" id="container">
-
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="layout-px-spacing">
-
                 <div class="row layout-top-spacing">
                     <div id="tableProgress" class="col-lg-12 col-12 layout-spacing">
-
                         <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false">
                             <div class="row">
                                 <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center">
@@ -31,10 +28,11 @@
                                                 v-model="query" aria-controls="range-search"></label></div>
                                 </div>
                             </div>
+
                             <div class="widget-header">
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                        <h4>Account Management</h4>
+                                        <h4>Banner Management</h4>
                                     </div>
                                 </div>
                             </div>
@@ -43,40 +41,30 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Accout Name</th>
-                                                <th>FullName</th>
-                                                <th>Gender</th>
-                                                <th>Address</th>
-                                                <th>Phone</th>
+                                                <th class="text-center">Code</th>
+                                                <th>Name</th>
+                                                <th>Images</th>
                                                 <th>Status</th>
-                                                <th>Role</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody v-if="query">
-                                            <tr v-for="item in accountFilte" :key="item.id">
+                                            <tr v-for="item in bannerFilte" :key="item">
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
-                                                    <p class="text-danger">
-                                                        <span v-if="item.gender">FeMale</span>
-                                                        <span v-if="!item.gender">Male</span>
-                                                    </p>
+                                                    <img :src="'http://localhost:54195/images/' + item.image"
+                                                        style="width: 100px" />
                                                 </td>
-                                                <td>{{ item.address }}</td>
-                                                <td>{{ item.phone }}</td>
                                                 <td>
-                                                    <p class="text-success">
-                                                        <span v-if="item.status">Action</span>
-                                                        <span v-if="!item.status">No Action</span>
+                                                    <p class="text-danger">
+                                                        {{ item.status == true ? "Action" : "No Action" }}
                                                     </p>
                                                 </td>
-                                                <td>{{ item.role }}</td>
-
                                                 <td class="text-center">
                                                     <a href="javascript:void(0);" data-toggle="tooltip"
                                                         data-placement="top" title="" data-original-title="Edit"
-                                                        style="padding: 20px;" v-on:click="onEdit(item)"><svg
+                                                        style="padding: 20px" v-on:click="onEdit(item)"><svg
                                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                             stroke-width="2" stroke-linecap="round"
@@ -102,29 +90,27 @@
                                                 </td>
                                             </tr>
                                         </tbody>
+
                                         <tbody v-else>
-                                            <tr v-for="item in paginated" :key="item.id">
+                                            <tr v-for="item in paginated" :key="item">
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
-                                                    <p class="text-danger">
-                                                        <span v-if="item.gender">FeMale</span>
-                                                        <span v-if="!item.gender">Male</span>
-                                                    </p>
+                                                    <img :src="'http://localhost:54195/images/' + item.image"
+                                                        style="width: 100px" />
                                                 </td>
-                                                <td>{{ item.address }}</td>
-                                                <td>{{ item.phone }}</td>
                                                 <td>
-                                                    <p class="text-success">
-                                                        <span v-if="item.status">Action</span>
-                                                        <span v-if="!item.status">No Action</span>
+                                                    <p class="text-danger" v-if="item.status">
+                                                        Action
+                                                    </p>
+                                                    <p class="text-danger" v-else>
+                                                        No Action
                                                     </p>
                                                 </td>
-                                                <td>{{ item.role }}</td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0);" data-toggle="tooltip"
                                                         data-placement="top" title="" data-original-title="Edit"
-                                                        style="padding: 20px;" v-on:click="onEdit(item)"><svg
+                                                        style="padding: 20px" v-on:click="onEdit(item)"><svg
                                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                             stroke-width="2" stroke-linecap="round"
@@ -151,6 +137,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
+
                                 </div>
                                 <div class="column is-12">
                                     <nav class="pagination is-right" role="navigation" aria-label="pagination">
@@ -164,7 +151,7 @@
                                                     v-bind:class="{ isActive: (item === current), 'text-dark': isActive == false }"
                                                     class="btn-paginate pagination-link go-to has-text-orange"
                                                     aria-label="Goto page 1">{{ item
-}}</span>
+                                                    }}</span>
                                             </li>
                                             <li>
                                                 <a class="btn-paginate" @click="next"> Next </a>
@@ -175,14 +162,14 @@
                             </div>
                         </div>
                         <a href="" v-if="isShowEdit == true || isShowAdd == true" v-on:click.prevent="back_to"><svg
-                                xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                            height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
+                                xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px; height: 32px"
+                                height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
                                 viewBox="0 0 16 16">
                                 <path
                                     d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                             </svg></a>
-                        <AccountEdit :account="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
-                        <AccountAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
+                        <BannerEdit :banner="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
+                        <BannerAdd :banner="getShowAdd" v-if="isShowAdd == true" @ShowData="getData($event)" />
                     </div>
                 </div>
             </div>
@@ -211,60 +198,63 @@
     color: #ffff;
 }
 </style>
+ 
 <script>
-import AccountEdit from "../Account/edit.vue";
-import AccountAdd from "../Account/add.vue";
-import AccountService from "@/services/AccountService";
-import "vue-awesome-paginate/dist/style.css";
+
+import BannerService from "../../services/BannerService";
+import BannerEdit from "../Banner/edit.vue";
+import BannerAdd from "../Banner/add.vue";
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
-        AccountAdd,
-        AccountEdit
+        BannerEdit,
+        BannerAdd,
     },
     data() {
         return {
-            account: null,
+            banner: null,
             showEdit: null,
             isShowEdit: false,
             isShowAdd: false,
+            getShowAdd: null,
             query: "",
             current: 1,
             pageSize: 5,
             isActive: false
-        }
+        };
     },
-    created() {
-        AccountService.getAll()
+
+    mounted() {
+        BannerService.getAll()
             .then((res) => {
-                this.account = res.data;
-                console.log(res);
+                this.banner = res.data;
+                console.log(this.banner);
+
             })
             .catch((error) => {
                 console.log(error);
             })
             .finally(() => {
                 //Perform action in always
-            })
-
+            });
     },
     computed: {
         resultCount() {
-            return this.account && this.account.length
+            return this.banner && this.banner.length
         },
-        accountFilte() {
+        bannerFilte() {
             if (this.query) {
-                return this.account.filter((account) => {
+                return this.banner.filter((banner) => {
                     return (
-                        account.name
+                        banner.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.account;
+                return this.banner;
             }
 
         },
@@ -275,7 +265,7 @@ export default {
             return this.indexStart + this.pageSize;
         },
         totalPaginate() {
-            if ((this.resultCount % 5) == 0) {
+            if (this.resultCount % 5 == 0) {
                 return Math.floor(this.resultCount / 5);
             } else {
                 return Math.floor(this.resultCount / 5) + 1;
@@ -284,17 +274,15 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.account.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.banner.slice(this.indexStart, this.indexEnd, this.totalPaginate);
             }
             else {
-                return this.account;
+                return this.banner;
             }
         }
-
     },
     methods: {
         onCurrent(item) {
-
             this.isActive = true
             return this.current = item;
         },
@@ -313,62 +301,57 @@ export default {
         },
         onEdit(data) {
             this.showEdit = data;
-            this.isShowEdit = true
-            console.log(data);
+            this.isShowEdit = true;
+            console.log(this.banner);
         },
         back_to() {
-            this.isShowEdit = false,
-                this.isShowAdd = false
+            (this.isShowEdit = false), (this.isShowAdd = false);
         },
         onAdd() {
-            this.isShowAdd = true
+            this.isShowAdd = true;
+            this.getShowAdd = this.banner;
         },
         getData(data) {
-            this.account.push(data);
+            this.banner.push(data);
             console.log(data);
             this.isShowAdd = false;
-            this.$forceUpdate();
-
         },
         getEdit(data) {
-            for (let i = 0; i < this.account.length; i++) {
-                if (this.account[i].id == data.id) {
-                    this.account[i] = data;
-                    this.$forceUpdate();
-                    break;
+            for (let i = 0; i < this.banner.length; i++) {
+                if (this.banner[i].id == data.id) {
+                    this.banner[i] = data;
+                    console.log(this.banner[i]);
                 }
             }
-
-            console.log(this.account);
+            console.log(this.banner);
             this.isShowEdit = false;
         },
         onDelete(item) {
-            if (confirm("Bạn có chắc muốn xóa tài khoản mã " + item.code)) {
-                console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
-                AccountService.delete(item.id)
-                    .then(response => {
+            console.log(item.id);
+            if (confirm("Bạn có chắc muốn xóa banner mã " + item.code)) {
+                BannerService.delete(item.id)
+                    .then((response) => {
                         console.log(response);
-                        this.account.splice(this.account.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.banner
+                            .splice(
+                                this.banner.findIndex((e) => e.id == item.id),
+                                1
+                            )
+                            .push(response.data);
                         // createToast({
                         //     title: 'Thành công',
-                        //     description: 'Xóa tài khoản thành công',
+                        //     description: 'Xóa banner thành công',
                         //     type: 'success',
                         //     timeout: 5000,
 
                         // })
-                        // if (item.email == login.email) {
-                        //     localStorage.removeItem("user");
-                        //     window.location.href = "/login"
-                        // }
-
                     })
                     .catch(function (error) {
-                        console.log(error)
-                    })
+                        console.log(error);
+                    });
             }
-        }
-    }
+        },
 
-}
+    }
+};
 </script>
