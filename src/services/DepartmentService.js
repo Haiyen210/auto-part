@@ -1,19 +1,19 @@
 import http from "../http-common";
-class CategoryService {
+class DepartmentService {
     getAll() {
-        return http.get("/CategoryProducts");
+        return http.get("/Departments");
     }
     get(id) {
-        return http.get(`/CategoryProducts/${id}`);
+        return http.get(`/Departments/${id}`);
     }
     create(data) {
-        return http.post("/CategoryProducts", data);
+        return http.post("/Departments", data);
     }
     update(data) {
-        return http.post(`/CategoryProducts/PutAccount`, data);
+        return http.post(`/Departments/PutDepartments`, data);
     }
     delete(id) {
-            return http.delete(`/CategoryProducts/${id}`);
+            return http.delete(`/Departments/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);
@@ -22,4 +22,4 @@ class CategoryService {
         //     return http.get(`/tutorials?title=${title}`);
         //   }
 }
-export default new CategoryService();
+export default new DepartmentService();

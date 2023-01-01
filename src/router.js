@@ -3,6 +3,7 @@ import Account from "./view/Account/index";
 import Product from "./view/Product/index";
 import WareHouse from "./view/WareHouse/index";
 import BillDetail from "./view/BillDetail/index";
+import Banner from "./view/Banner/index";
 import Home from "./view/home";
 const routes = [{
         path: "/",
@@ -28,6 +29,12 @@ const routes = [{
         path: "/billdetaile",
         name: "billdetail",
         component: BillDetail,
+        
+    },
+    {
+        path: "/banner",
+        name: "banner",
+        component: Banner,
     },
 
 ];
