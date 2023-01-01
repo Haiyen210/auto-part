@@ -1,19 +1,19 @@
 import http from "../http-common";
 class AccountService {
     getAll() {
-        return http.get("/Account");
+        return http.get("/accountadmins");
     }
     get(id) {
-        return http.get(`/Account/${id}`);
+        return http.get(`/accountadmins/${id}`);
     }
     create(data) {
-        return http.post("/Account", data);
+        return http.post("/accountadmins", data);
     }
     update(data) {
-        return http.post(`/Account/PutAccount`, data);
+        return http.post(`/accountadmins/Putaccountadmins`, data);
     }
     delete(id) {
-            return http.delete(`/Account/${id}`);
+            return http.delete(`/accountadmins/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);

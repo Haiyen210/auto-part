@@ -1,19 +1,19 @@
 import http from "../http-common";
-class WareHouseService {
+class BillDetailService {
     getAll() {
-        return http.get("/warehouses");
+        return http.get("http://localhost:54195/api/billdetail");
     }
     get(id) {
-        return http.get(`/warehouses/${id}`);
+        return http.get(`/Account/${id}`);
     }
     create(data) {
-        return http.post("/warehouses", data);
+        return http.post("/Account", data);
     }
     update(data) {
-        return http.post(`/warehouses/Putwarehouses`, data);
+        return http.post(`/Account/PutAccount`, data);
     }
     delete(id) {
-            return http.delete(`/warehouses/${id}`);
+            return http.delete(`/Account/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);
@@ -22,4 +22,4 @@ class WareHouseService {
         //     return http.get(`/tutorials?title=${title}`);
         //   }
 }
-export default new WareHouseService();
+export default new BillDetailService();
