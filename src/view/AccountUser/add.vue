@@ -11,7 +11,7 @@
         <div class="widget-content widget-content-area">
             <form method="post" v-on:submit.prevent="onSubmitForm">
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Account Name</label>
+                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="text" class="form-control" id="code" placeholder="" v-model="account.code"
                             :class="{ error: codeError.status, success: codeSuccess.status }" />
@@ -95,13 +95,13 @@
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Gender</label>
                         <div class="col-xl-10 col-lg-9 col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="account.gender" :value="true"
+                                <input class="form-check-input" type="radio" v-model="account.gender" :value="0"
                                     id="gender" style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckDefault"> FeMale
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="account.gender" :value="false"
+                                <input class="form-check-input" type="radio" v-model="account.gender" :value="1"
                                     id="gender" style="width: 16px;height: 16px;" checked />
                                 <label class="form-check-label" for="flexCheckChecked"> Male </label>
                             </div>
@@ -119,7 +119,7 @@
 
 </template>
 <script>
-import AccountService from '@/services/AccountService';
+import AccountService from '@/services/AccountUserService';
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
@@ -388,6 +388,7 @@ export default {
                     status: false
                 }
             }
+
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
                 AccountService.create(this.account)
                     .then((res) => {
@@ -395,7 +396,7 @@ export default {
                         this.ID = res.data.id;
                         this.account.id = this.ID;
                         this.account.status = true;
-                        this.account.gender == null ? this.account.gender = true : this.account.gender = false;
+                        this.account.gender == '' ? this.account.gender = true : this.account.gender = false;
                         console.log(this.account);
                         // createToast({
                         //     title: 'Success',

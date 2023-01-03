@@ -34,7 +34,7 @@
                             <div class="widget-header">
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                        <h4>Account Management</h4>
+                                        <h4>Customer Management</h4>
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Accout Name</th>
+                                                <th class="text-center">Code</th>
                                                 <th>FullName</th>
                                                 <th>Gender</th>
                                                 <th>Address</th>
@@ -54,7 +54,7 @@
                                             </tr>
                                         </thead>
                                         <tbody v-if="query">
-                                            <tr v-for="item in accountFilte" :key="item.id">
+                                            <tr v-for="item in customerFilte" :key="item.id">
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
@@ -181,8 +181,8 @@
                                 <path
                                     d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                             </svg></a>
-                        <AccountEdit :account="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
-                        <AccountAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
+                        <CustomerEdit :customer="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
+                        <CustomerAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
                     </div>
                 </div>
             </div>
@@ -212,21 +212,21 @@
 }
 </style>
 <script>
-import AccountEdit from "../Account/edit.vue";
-import AccountAdd from "../Account/add.vue";
-import AccountService from "@/services/AccountService";
+import CustomerEdit from "../AccountUser/edit.vue";
+import CustomerAdd from "../AccountUser/add.vue";
+import CustomerService from "@/services/AccountUserService";
 import "vue-awesome-paginate/dist/style.css";
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
-        AccountAdd,
-        AccountEdit
+        CustomerAdd,
+        CustomerEdit
     },
     data() {
         return {
-            account: null,
+            customer: null,
             showEdit: null,
             isShowEdit: false,
             isShowAdd: false,
@@ -237,9 +237,9 @@ export default {
         }
     },
     created() {
-        AccountService.getAll()
+        CustomerService.getAll()
             .then((res) => {
-                this.account = res.data;
+                this.customer = res.data;
                 console.log(res);
             })
             .catch((error) => {
@@ -252,19 +252,19 @@ export default {
     },
     computed: {
         resultCount() {
-            return this.account && this.account.length
+            return this.customer && this.customer.length
         },
-        accountFilte() {
+        customerFilte() {
             if (this.query) {
-                return this.account.filter((account) => {
+                return this.customer.filter((customer) => {
                     return (
-                        account.name
+                        customer.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.account;
+                return this.customer;
             }
 
         },
@@ -284,10 +284,10 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.account.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.customer.slice(this.indexStart, this.indexEnd, this.totalPaginate);
             }
             else {
-                return this.account;
+                return this.customer;
             }
         }
 
@@ -324,32 +324,32 @@ export default {
             this.isShowAdd = true
         },
         getData(data) {
-            this.account.push(data);
+            this.customer.push(data);
             console.log(data);
             this.isShowAdd = false;
             this.$forceUpdate();
 
         },
         getEdit(data) {
-            for (let i = 0; i < this.account.length; i++) {
-                if (this.account[i].id == data.id) {
-                    this.account[i] = data;
+            for (let i = 0; i < this.customer.length; i++) {
+                if (this.customer[i].id == data.id) {
+                    this.customer[i] = data;
                     this.$forceUpdate();
                     break;
                 }
             }
 
-            console.log(this.account);
+            console.log(this.customer);
             this.isShowEdit = false;
         },
         onDelete(item) {
             if (confirm("Bạn có chắc muốn xóa tài khoản mã " + item.code)) {
                 console.log(item.id);
                 // let login = JSON.parse(localStorage.getItem("user"));
-                AccountService.delete(item.id)
+                CustomerService.delete(item.id)
                     .then(response => {
                         console.log(response);
-                        this.account.splice(this.account.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
                         // createToast({
                         //     title: 'Thành công',
                         //     description: 'Xóa tài khoản thành công',

@@ -4,7 +4,7 @@
         <div class="widget-header">
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                    <h4>Edit account</h4>
+                    <h4>Edit Customer</h4>
                 </div>
             </div>
         </div>
@@ -12,7 +12,7 @@
             <form method="post" v-on:submit.prevent="onSubmitEditForm" v-if="accounts">
                 <input type="hidden" v-model="accounts.id">
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Account Name</label>
+                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="text" class="form-control" id="code" placeholder="" v-model="accounts.code" />
                     </div>
@@ -72,7 +72,7 @@
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" v-model="accounts.gender" :value="false"
-                                    :checked="accounts.gender === false" id="gender"
+                                    :checked="accounts.gender === false || accounts.gender == null" id="gender"
                                     style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckChecked"> Male </label>
                             </div>
@@ -108,37 +108,31 @@
     </div>
 </template>
 <script>
-import AccountService from '@/services/AccountService';
+import AccountService from '@/services/AccountUserService';
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
-    props: ['account'],
+    props: ['customer'],
 
     data() {
 
         return {
-            accounts: this.account,
+            accounts: this.customer,
             url: null,
             ishowImage: false,
-            category: null,
             message: "",
         }
 
-
+    },
+    mounted(){
+        console.log(this.accounts);
     },
     methods: {
 
         onSubmitEditForm() {
             AccountService.update(this.accounts)
                 .then((res) => {
-                    console.log(res);
-                    // createToast({
-                    //     title: 'Thành công',
-                    //     description: 'Sửa tài khoản thành công',
-                    //     type: 'success',
-                    //     timeout: 5000,
-
-                    // })    
+                    console.log(res);   
                 })
                 .catch((error) => {
                     // error.response.status Check status code
