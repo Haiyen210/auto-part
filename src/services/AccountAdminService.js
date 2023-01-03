@@ -15,6 +15,15 @@ class AccountAdminService {
     update(data) {
         return http.post(`/AccountAdmin/PutAccountAdmin`, data);
     }
+    temporaryDelete(data) {
+        return http.post(`/AccountAdmin/TemporaryDelete`, data);
+    }
+    getTrash() {
+        return http.get("/AccountAdmin/TrashAccountAdmin");
+    }
+    repeat(data) {
+        return http.post(`/AccountAdmin/RepeatAccountAdmin`, data);
+    }
     delete(id) {
             return http.delete(`/AccountAdmin/${id}`);
         }

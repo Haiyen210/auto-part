@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import AccountAdmin from "./view/AccountAdmin/index";
 import Category from "./view/Category/index";
 import Factory from "./view/Factory/index";
-import Product from "./view/Product/index";
 import WareHouse from "./view/WareHouse/index";
 import Banner from "./view/Banner/index";
 import Home from "./view/home";
@@ -32,11 +31,6 @@ const routes = [{
         path: "/factory",
         name: "factory",
         component: Factory,
-    },
-    {
-        path: "/product",
-        name: "product",
-        component: Product,
     },
     {
         path: "/warehouse",

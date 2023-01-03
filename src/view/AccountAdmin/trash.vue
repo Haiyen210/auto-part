@@ -1,7 +1,8 @@
 <template>
-    <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
+    <div class="statbox widget box box-shadow" >
         <div class="row">
-            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3" style="margin-left: -23px;">
+            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
+                style="margin-left: -23px;">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -16,7 +17,7 @@
         <div class="widget-header">
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                    <h4>Trash Category Management</h4>
+                    <h4>Trash Account Management</h4>
                 </div>
             </div>
         </div>
@@ -25,27 +26,44 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center">Code</th>
-                            <th>Name</th>
+                            <th class="text-center">Accout Name</th>
+                            <th>FullName</th>
+                            <th>Gender</th>
+                            <th>Address</th>
+                            <th>Department</th>
                             <th>Status</th>
+                            <th>Role</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
-
                     <tbody v-if="query">
-                        <tr v-for="item in categoryFilte" :key="item.id">
+                        <tr v-for="item in accountFilte" :key="item.id">
                             <td class="text-center">{{ item.code }}</td>
                             <td>{{ item.name }}</td>
+                            <td>
+                                <p class="text-danger">
+                                    <span v-if="item.gender">FeMale</span>
+                                    <span v-if="!item.gender">Male</span>
+                                </p>
+                            </td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.departmentId }}</td>
                             <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
                                     <span v-if="!item.status">No Action</span>
                                 </p>
                             </td>
-
+                            <td>
+                                <p class="">
+                                    <span v-if="item.role == 0">Admin WareHouse</span>
+                                    <span v-if="item.role == 1">Admin Factory</span>
+                                    <span v-if="item.role == 2">Admin Management</span>
+                                </p>
+                            </td>
 
                             <td class="text-center">
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title=""
+                                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title=""
                                     data-original-title="Edit" style="padding: 20px;" v-on:click="onRepeat(item)"><svg
                                         enable-background="new 0 0 64 64" viewBox="0 0 64 64"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -82,13 +100,28 @@
                             <td class="text-center">{{ item.code }}</td>
                             <td>{{ item.name }}</td>
                             <td>
+                                <p class="text-danger">
+                                    <span v-if="item.gender">FeMale</span>
+                                    <span v-if="!item.gender">Male</span>
+                                </p>
+                            </td>
+                            <td>{{ item.address }}</td>
+                            <td>{{ item.departmentId }}</td>
+                            <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
                                     <span v-if="!item.status">No Action</span>
                                 </p>
                             </td>
+                            <td>
+                                <p class="">
+                                    <span v-if="item.role == 0">Admin WareHouse</span>
+                                    <span v-if="item.role == 1">Admin Factory</span>
+                                    <span v-if="item.role == 2">Admin Management</span>
+                                </p>
+                            </td>
                             <td class="text-center">
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title=""
+                                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title=""
                                     data-original-title="Edit" style="padding: 20px;" v-on:click="onRepeat(item)"><svg
                                         enable-background="new 0 0 64 64" viewBox="0 0 64 64"
                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -168,32 +201,26 @@
 }
 </style>
 <script>
-import CategoryProductService from "@/services/CategoryProductService";
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
+import AccountAdminService from '@/services/AccountAdminService';
 export default {
     name: "Index",
-    components: {
-    },
     data() {
         return {
-            category: null,
+            account: null,
             showEdit: null,
             isShowEdit: false,
             isShowAdd: false,
-            isShowTrash: false,
             query: "",
             current: 1,
             pageSize: 5,
-            isActive: false,
-            trash: this.cate,
+            isActive: false
         }
     },
     created() {
-        CategoryProductService.getTrash()
+        AccountAdminService.getTrash()
             .then((res) => {
-                this.category = res.data;
+                this.account = res.data;
                 console.log(res);
             })
             .catch((error) => {
@@ -206,19 +233,19 @@ export default {
     },
     computed: {
         resultCount() {
-            return this.category && this.category.length
+            return this.account && this.account.length
         },
-        categoryFilte() {
+        accountFilte() {
             if (this.query) {
-                return this.category.filter((category) => {
+                return this.account.filter((account) => {
                     return (
-                        category.name
+                        account.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.category;
+                return this.account;
             }
 
         },
@@ -238,15 +265,18 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.category.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.account.slice(this.indexStart, this.indexEnd, this.totalPaginate);
             }
             else {
-                return this.category;
+                return this.account;
             }
         }
 
     },
     methods: {
+        onTrash() {
+            this.isShowTrash = true
+        },
         onCurrent(item) {
 
             this.isActive = true
@@ -265,11 +295,16 @@ export default {
                 return this.current = this.totalPaginate;
             }
         },
+
+        back_to() {
+            this.isShowEdit = false,
+                this.isShowAdd = false
+        },
         onRepeat(item) {
-            CategoryProductService.repeat(item)
+            AccountAdminService.repeat(item)
                 .then(response => {
                     console.log(response);
-                    this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
+                    this.account.splice(this.account.findIndex(e => e.id == item.id), 1).push(response.data);
                     this.$emit("ShowDeleteData", item);
                 })
                 .catch(function (error) {
@@ -279,10 +314,10 @@ export default {
         onDelete(item) {
             if (confirm("Are you sure you want to delete " + item.code)) {
                 console.log(item.id);
-                CategoryProductService.delete(item.id)
+                AccountAdminService.delete(item.id)
                     .then(response => {
                         console.log(response);
-                        this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.account.splice(this.account.findIndex(e => e.id == item.id), 1).push(response.data);
                     })
                     .catch(function (error) {
                         console.log(error)

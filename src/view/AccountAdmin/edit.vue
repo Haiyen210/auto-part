@@ -433,13 +433,6 @@ export default {
             AccountService.update(this.accounts)
                 .then((res) => {
                     console.log(res);
-                    // createToast({
-                    //     title: 'Thành công',
-                    //     description: 'Sửa tài khoản thành công',
-                    //     type: 'success',
-                    //     timeout: 5000,
-
-                    // })    
                 })
                 .catch((error) => {
                     // error.response.status Check status code

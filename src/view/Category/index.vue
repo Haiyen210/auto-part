@@ -352,25 +352,10 @@ export default {
         },
         onDelete(item) {
             if (confirm("Are you sure you want to delete " + item.code)) {
-                console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
-
                 CategoryProductService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
                         this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Xóa tài khoản thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
-                        // if (item.email == login.email) {
-                        //     localStorage.removeItem("user");
-                        //     window.location.href = "/login"
-                        // }
-                        // this.$emit("ShowDeleteData", this.category);
                     })
                     .catch(function (error) {
                         console.log(error)
