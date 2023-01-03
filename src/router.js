@@ -46,6 +46,32 @@ const routes = [{
 
     },
     {
+        path: "/categoryProduct",
+        name: "category",
+        component: Category,
+    },
+    {
+        path: "/factory",
+        name: "factory",
+        component: Factory,
+    },
+    {
+        path: "/product",
+        name: "product",
+        component: Product,
+    },
+    {
+        path: "/warehouse",
+        name: "warehouse",
+        component: WareHouse,
+    },
+    {
+        path: "/billdetaile",
+        name: "billdetail",
+        component: BillDetail,
+
+    },
+    {
         path: "/banner",
         name: "banner",
         component: Banner,
