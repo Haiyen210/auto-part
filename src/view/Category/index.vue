@@ -174,8 +174,7 @@
                             </svg></a>
                         <CategoryEdit :category="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
                         <CategoryAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                        <CategoryTrash :cate="showTrash" v-if="isShowTrash == true"
-                            @ShowDeleteData="getDeleteData($event)" />
+                        <CategoryTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
                     </div>
                 </div>
             </div>
@@ -333,10 +332,10 @@ export default {
 
         },
         getDeleteData(data) {
-            // this.category.push(data);
+            this.category.push(data);
             console.log(data);
-            this.isShowTrash = true;
-            // this.$forceUpdate();
+            this.isShowTrash = false;
+            this.$forceUpdate();
 
         },
         getEdit(data) {
@@ -359,7 +358,7 @@ export default {
                 CategoryProductService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
-                        // this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
                         // createToast({
                         //     title: 'Thành công',
                         //     description: 'Xóa tài khoản thành công',
@@ -371,7 +370,7 @@ export default {
                         //     localStorage.removeItem("user");
                         //     window.location.href = "/login"
                         // }
-                        this.$emit("ShowDeleteData", this.category);
+                        // this.$emit("ShowDeleteData", this.category);
                     })
                     .catch(function (error) {
                         console.log(error)

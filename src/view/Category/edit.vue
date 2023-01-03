@@ -32,7 +32,16 @@
                         </p>
                     </div>
                 </div>
-
+                <div class="form-group row mb-4">
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Description</label>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="categorys.description"
+                            :class="{ error: descriptionError.status, success: descriptionSuccess.status }">
+                        <p class="text-error" v-if="descriptionError.status">{{ descriptionError.text }}</p>
+                        <p class="success-text" v-if="descriptionSuccess.status">{{ descriptionSuccess.text }}
+                        </p>
+                    </div>
+                </div>
                 <fieldset class="form-group mb-4">
                     <div class="row">
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Status</label>
@@ -90,6 +99,14 @@ export default {
                 status: false,
             },
             nameSuccess: {
+                text: "",
+                status: false,
+            },
+            descriptionError: {
+                text: "",
+                status: false,
+            },
+            descriptionSuccess: {
                 text: "",
                 status: false,
             }
@@ -156,7 +173,28 @@ export default {
                     status: false
                 }
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true ) {
+            if (this.category.description.length == 0) {
+                this.descriptionError = {
+                    text: "Description cannot be empty",
+                    status: true
+                }
+
+            } else if (this.category.description.length > 0) {
+                this.descriptionSuccess = {
+                    text: "Success!",
+                    status: true
+                }
+                this.descriptionError = {
+                    text: "",
+                    status: false
+                }
+            } else {
+                this.descriptionError = {
+                    text: "",
+                    status: false
+                }
+            }
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true  && this.descriptionSuccess.status == true) {
             CategoryProductService.update(this.categorys)
                 .then((res) => {
                     console.log(res);

@@ -113,7 +113,6 @@ export default {
             url: null,
             banners: this.banner,
             ishowImage: false,
-            old: "localhost:54195/images/" + this.banners.image,
             codeError: {
                 text: "",
                 status: false,
