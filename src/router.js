@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Account from "./view/Account/index";
+import Category from "./view/Category/index";
+import Factory from "./view/Factory/index";
 import Product from "./view/Product/index";
 import WareHouse from "./view/WareHouse/index";
 import BillDetail from "./view/BillDetail/index";
@@ -14,6 +16,16 @@ const routes = [{
         path: "/account",
         name: "account",
         component: Account,
+    },
+    {
+        path: "/categoryProduct",
+        name: "category",
+        component: Category,
+    },
+    {
+        path: "/factory",
+        name: "factory",
+        component: Factory,
     },
     {
         path: "/product",
