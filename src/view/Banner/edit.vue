@@ -66,7 +66,7 @@
                         </label>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-sm-10">
-                        <img :src="'http://localhost:54195/images/' + banners.images"
+                        <img :src="'http://localhost:54195/images/' + banners.image"
                             style="width: 600px; height: 500px; margin-left: 20%" v-if="ishowImage == false" />
                         <img v-bind:src="url" style="width: 600px; height: 500px; margin-left: 20%"
                             v-if="ishowImage == true" />
