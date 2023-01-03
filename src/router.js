@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import AccountAdmin from "./view/AccountAdmin/index";
+import Category from "./view/Category/index";
+import Factory from "./view/Factory/index";
+import Product from "./view/Product/index";
+import WareHouse from "./view/WareHouse/index";
+import BillDetail from "./view/BillDetail/index";
 import Banner from "./view/Banner/index";
 import Home from "./view/home";
 import Login from "@/view/login";
@@ -13,6 +18,32 @@ const routes = [{
         path: "/account-manager",
         name: "account",
         component: AccountAdmin,
+    },
+    {
+        path: "/categoryProduct",
+        name: "category",
+        component: Category,
+    },
+    {
+        path: "/factory",
+        name: "factory",
+        component: Factory,
+    },
+    {
+        path: "/product",
+        name: "product",
+        component: Product,
+    },
+    {
+        path: "/warehouse",
+        name: "warehouse",
+        component: WareHouse,
+    },
+    {
+        path: "/billdetaile",
+        name: "billdetail",
+        component: BillDetail,
+
     },
     {
         path: "/banner",

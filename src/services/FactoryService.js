@@ -1,19 +1,19 @@
 import http from "../http-common";
-class WareHouseService {
+class FactoryService {
     getAll() {
-        return http.get("/warehouses");
+        return http.get("/Factory");
     }
     get(id) {
-        return http.get(`/warehouses/${id}`);
+        return http.get(`/Factory/${id}`);
     }
     create(data) {
-        return http.post("/warehouses", data);
+        return http.post("/Factory", data);
     }
     update(data) {
-        return http.post(`/warehouses/Putwarehouses`, data);
+        return http.post(`/Factory/PutFactory`, data);
     }
     delete(id) {
-            return http.delete(`/warehouses/${id}`);
+            return http.delete(`/Factory/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);
@@ -22,4 +22,4 @@ class WareHouseService {
         //     return http.get(`/tutorials?title=${title}`);
         //   }
 }
-export default new WareHouseService();
+export default new FactoryService();
