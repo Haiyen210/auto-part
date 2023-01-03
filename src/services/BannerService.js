@@ -1,19 +1,19 @@
 import http from "../http-common";
-class AccountService {
+class BannerService {
     getAll() {
-        return http.get("/accountadmins");
+        return http.get("/Banner");
     }
     get(id) {
-        return http.get(`/accountadmins/${id}`);
+        return http.get(`/Banner/${id}`);
     }
     create(data) {
-        return http.post("/accountadmins", data);
+        return http.post("/Banner", data);
     }
     update(data) {
-        return http.post(`/accountadmins/Putaccountadmins`, data);
+        return http.post(`/Banner/PutBanner`, data);
     }
     delete(id) {
-            return http.delete(`/accountadmins/${id}`);
+            return http.delete(`/Banner/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);
@@ -22,4 +22,4 @@ class AccountService {
         //     return http.get(`/tutorials?title=${title}`);
         //   }
 }
-export default new AccountService();
+export default new BannerService();

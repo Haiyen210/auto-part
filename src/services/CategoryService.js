@@ -1,19 +1,19 @@
 import http from "../http-common";
-class AccountService {
+class CategoryService {
     getAll() {
-        return http.get("/accountadmins");
+        return http.get("/CategoryProducts");
     }
     get(id) {
-        return http.get(`/accountadmins/${id}`);
+        return http.get(`/CategoryProducts/${id}`);
     }
     create(data) {
-        return http.post("/accountadmins", data);
+        return http.post("/CategoryProducts", data);
     }
     update(data) {
-        return http.post(`/accountadmins/Putaccountadmins`, data);
+        return http.post(`/CategoryProducts/PutAccount`, data);
     }
     delete(id) {
-            return http.delete(`/accountadmins/${id}`);
+            return http.delete(`/CategoryProducts/${id}`);
         }
         //   deleteAll() {
         //     return http.delete(`/tutorials`);
@@ -22,4 +22,4 @@ class AccountService {
         //     return http.get(`/tutorials?title=${title}`);
         //   }
 }
-export default new AccountService();
+export default new CategoryService();
