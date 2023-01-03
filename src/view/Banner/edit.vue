@@ -13,20 +13,38 @@
                 <div class="form-group row mb-4">
                     <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="code" placeholder="" v-model="banners.code" />
+                        <input type="text" class="form-control" id="code" placeholder="" v-model="banners.code"  :class="{ error: codeError.status, success: codeSuccess.status }" />
+                        <p class="text-error" v-if="codeError.status">
+                            {{ codeError.text }}
+                        </p>
+                        <p class="success-text" v-if="codeSuccess.status">
+                            {{ codeSuccess.text }}
+                        </p>
                     </div>
                 </div>
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Name</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="name" placeholder="" v-model="banners.name" />
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="banners.name"  :class="{ error: nameError.status, success: nameSuccess.status }" />
+                        <p class="text-error" v-if="nameError.status">
+                            {{ nameError.text }}
+                        </p>
+                        <p class="success-text" v-if="nameSuccess.status">
+                            {{ nameSuccess.text }}
+                        </p>
                     </div>
                 </div>
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Description</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="text" class="form-control" id="name" placeholder=""
-                            v-model="banners.description" />
+                            v-model="banners.description" :class="{ error: nameError.status, success: nameSuccess.status }" />
+                        <p class="text-error" v-if="nameError.status">
+                            {{ nameError.text }}
+                        </p>
+                        <p class="success-text" v-if="nameSuccess.status">
+                            {{ nameSuccess.text }}
+                        </p>
 
                     </div>
                 </div>
@@ -95,7 +113,31 @@ export default {
             url: null,
             banners: this.banner,
             ishowImage: false,
-            old: "localhost:54195/images/" + this.banner.image,
+            old: "localhost:54195/images/" + this.banners.image,
+            codeError: {
+                text: "",
+                status: false,
+            },
+            codeSuccess: {
+                text: "",
+                status: false,
+            },
+            nameError: {
+                text: "",
+                status: false,
+            },
+            nameSuccess: {
+                text: "",
+                status: false,
+            },
+            descriptionError: {
+                text: "",
+                status: false,
+            },
+            descriptionSuccess: {
+                text: "",
+                status: false,
+            },
         };
     },
     methods: {
@@ -106,6 +148,79 @@ export default {
             this.ishowImage = true;
         },
         onSubmitEditForm() {
+            if (this.banners.code.length == 0) {
+                this.codeError = {
+                    text: "Code cannot be empty",
+                    status: true,
+                };
+            } else if (this.banners.code.length < 4 || this.banners.code.length > 6) {
+                this.codeError = {
+                    text: "Code must be between 4 and 6 characters",
+                    status: true,
+                };
+            } else if (this.banners.code.length > 4 || this.banners.code.length < 6) {
+                this.codeSuccess = {
+                    text: "Success!",
+                    status: true,
+                };
+                 this.codeError = {
+                    text: "",
+                    status: false,
+                };
+            } else {
+                this.codeError = {
+                    text: "",
+                    status: false,
+                };
+            }
+
+            if (this.banners.name.length == 0) {
+                this.nameError = {
+                    text: "Name cannot be empty",
+                    status: true,
+                };
+            } else if (this.banners.name.length < 6 || this.banners.name.length > 50) {
+                this.nameError = {
+                    text: "Name must be between 6 and 50 characters",
+                    status: true,
+                };
+            } else if (this.banners.name.length > 6 || this.banners.name.length < 50) {
+                this.nameSuccess = {
+                    text: "Success!",
+                    status: true,
+                };
+                 this.nameError = {
+                    text: "",
+                    status: false,
+                };
+            } else {
+                this.nameError = {
+                    text: "",
+                    status: false,
+                };
+            }
+            if (this.banners.description.length == 0) {
+                this.descriptionError = {
+                    text: "Description cannot be empty",
+                    status: true,
+                };
+            
+            } else if (this.banners.description.length > 6 || this.banners.description.length < 50) {
+                this.descriptionSuccess = {
+                    text: "Success!",
+                    status: true,
+                };
+                 this.descriptionError = {
+                    text: "",
+                    status: false,
+                };
+            } else {
+                this.descriptionError = {
+                    text: "",
+                    status: false,
+                };
+            }
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true)  {
             UploadService.upload(this.currentImage)
                 .then((response) => {
                     console.log();
@@ -136,6 +251,7 @@ export default {
                     //Perform action in always
                 });
             this.$emit("ShowEditData", this.banners);
+            }
         },
 
     },
