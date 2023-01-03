@@ -31,6 +31,16 @@
                         </p>
                     </div>
                 </div>
+                <div class="form-group row mb-4">
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Description</label>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="category.description"
+                            :class="{ error: descriptionError.status, success: descriptionSuccess.status }">
+                        <p class="text-error" v-if="descriptionError.status">{{ descriptionError.text }}</p>
+                        <p class="success-text" v-if="descriptionSuccess.status">{{ descriptionSuccess.text }}
+                        </p>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary mt-3">Save</button>
@@ -57,6 +67,7 @@ export default {
                 id: null,
                 code: "",
                 name: "",
+                description:"",
                 status: true
             },
             codeError: {
@@ -72,6 +83,14 @@ export default {
                 status: false,
             },
             nameSuccess: {
+                text: "",
+                status: false,
+            },
+            descriptionError: {
+                text: "",
+                status: false,
+            },
+            descriptionSuccess: {
                 text: "",
                 status: false,
             }
@@ -137,8 +156,28 @@ export default {
                     status: false
                 }
             }
+            if (this.category.description.length == 0) {
+                this.descriptionError = {
+                    text: "Description cannot be empty",
+                    status: true
+                }
 
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true ) {
+            } else if (this.category.description.length > 0) {
+                this.descriptionSuccess = {
+                    text: "Success!",
+                    status: true
+                }
+                this.descriptionError = {
+                    text: "",
+                    status: false
+                }
+            } else {
+                this.descriptionError = {
+                    text: "",
+                    status: false
+                }
+            }
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true  && this.descriptionSuccess.status == true) {
                 CategoryProductService.create(this.category)
                     .then((res) => {
                         //Perform Success Action
