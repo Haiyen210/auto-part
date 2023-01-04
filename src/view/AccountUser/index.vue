@@ -46,7 +46,7 @@
                             <div class="widget-header">
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                        <h4>account Management</h4>
+                                        <h4>Customer Management</h4>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                             </tr>
                                         </thead>
                                         <tbody v-if="query">
-                                            <tr v-for="item in accountFilte" :key="item.id">
+                                            <tr v-for="item in customerFilte" :key="item.id">
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
@@ -76,7 +76,7 @@
                                                     </p>
                                                 </td>
                                                 <td>{{ item.address }}</td>
-                                                <td>{{ item.departmentName }}</td>
+                                                <td>{{ item.departmentId }}</td>
                                                 <td>
                                                     <p class="text-success">
                                                         <span v-if="item.status">Action</span>
@@ -200,14 +200,13 @@
                         </div>
                         <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
                             v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                            height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
-                                viewBox="0 0 16 16">
+                            height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
                                 <path
                                     d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                             </svg></a>
-                        <AccountEdit :account="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
-                        <AccountAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                        <AccountTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
+                        <CustomerEdit :customer="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
+                        <CustomerAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
+                        <CustomerTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
 
                     </div>
                 </div>
@@ -222,7 +221,7 @@
 }
 
 .btn-paginate {
-    margin-inline: 5px;
+    n-inline: 5px;
     cursor: pointer;
     border-style: groove;
     border-radius: 100%;
@@ -238,38 +237,36 @@
 }
 </style>
 <script>
-import AccountEdit from "../AccountAdmin/edit.vue";
-import AccountAdd from "../AccountAdmin/add.vue";
-import AccountService from "@/services/AccountAdminService";
-import AccountTrash from "../AccountAdmin/trash.vue";
-
+import CustomerEdit from "../AccountUser/edit.vue";
+import CustomerAdd from "../AccountUser/add.vue";
+import AccountUserService from "@/services/AccountUserService.js";
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
+import CustomerTrash from "@/view/AccountUser/trash.vue"
 export default {
     name: "Index",
     components: {
-        AccountAdd,
-        AccountEdit,
-        AccountTrash
+        CustomerAdd,
+        CustomerEdit,
+        CustomerTrash
     },
     data() {
         return {
-            account: null,
+            customer: null,
             showEdit: null,
             isShowEdit: false,
             isShowAdd: false,
+            isShowTrash: false,
+            showTrash: null,
             query: "",
             current: 1,
             pageSize: 5,
-            isActive: false,
-            isShowTrash: false
+            isActive: false
         }
     },
     created() {
-        AccountService.getAll()
+        AccountUserService.getAll()
             .then((res) => {
-                this.account = res.data;
+                this.customer = res.data;
                 console.log(res);
             })
             .catch((error) => {
@@ -282,19 +279,19 @@ export default {
     },
     computed: {
         resultCount() {
-            return this.account && this.account.length
+            return this.customer && this.customer.length
         },
-        accountFilte() {
+        customerFilte() {
             if (this.query) {
-                return this.account.filter((account) => {
+                return this.customer.filter((customer) => {
                     return (
-                        account.name
+                        customer.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.account;
+                return this.customer;
             }
 
         },
@@ -314,18 +311,15 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.account.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.customer.slice(this.indexStart, this.indexEnd, this.totalPaginate);
             }
             else {
-                return this.account;
+                return this.customer;
             }
         }
 
     },
     methods: {
-        onTrash() {
-            this.isShowTrash = true
-        },
         onCurrent(item) {
 
             this.isActive = true
@@ -351,46 +345,49 @@ export default {
         },
         back_to() {
             this.isShowEdit = false,
-                this.isShowAdd = false,
-                this.isShowTrash = false
+            this.isShowAdd = false,
+            this.isShowTrash = false
         },
         onAdd() {
             this.isShowAdd = true
         },
+        onTrash() {
+            this.isShowTrash = true
+        },
         getData(data) {
-            this.account.push(data);
+            this.customer.push(data);
             console.log(data);
             this.isShowAdd = false;
             this.$forceUpdate();
 
         },
-        getEdit(data) {
-            for (let i = 0; i < this.account.length; i++) {
-                if (this.account[i].id == data.id) {
-                    this.account[i] = data;
-                    this.$forceUpdate();
-                    break;
-                }
-            }
-
-            console.log(this.account);
-            this.isShowEdit = false;
-        },
         getDeleteData(data) {
-            this.account.push(data);
+            this.t.push(data);
             console.log(data);
             this.isShowTrash = false;
             this.$forceUpdate();
 
         },
+
+        getEdit(data) {
+            for (let i = 0; i < this.customer.length; i++) {
+                if (this.customer[i].id == data.id) {
+                    this.customer[i] = data;
+                    this.$forceUpdate();
+                    break;
+                }
+            }
+
+            console.log(this.customer);
+            this.isShowEdit = false;
+        },
         onDelete(item) {
-            if (confirm("Are you sure you want to delete the code account " + item.code)) {
+            if (confirm("Are you sure you want to delete " + item.code)) {
                 console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
-                AccountService.temporaryDelete(item)
+                AccountUserService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
-                        this.account.splice(this.account.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
                     })
                     .catch(function (error) {
                         console.log(error)

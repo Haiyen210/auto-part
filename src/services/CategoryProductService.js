@@ -24,11 +24,5 @@ class CategoryProductService {
     delete(id) {
             return http.delete(`/CategoryProduct/${id}`);
         }
-        //   deleteAll() {
-        //     return http.delete(`/tutorials`);
-        //   }
-        //   findByTitle(title) {
-        //     return http.get(`/tutorials?title=${title}`);
-        //   }
 }
 export default new CategoryProductService();

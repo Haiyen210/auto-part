@@ -4,8 +4,9 @@ import Category from "./view/Category/index";
 import Factory from "./view/Factory/index";
 import WareHouse from "./view/WareHouse/index";
 import Banner from "./view/Banner/index";
+import Department from "./view/Department/index";
+import AccountUser from "./view/AccountUser/index";
 import Home from "./view/home";
-import Login from "@/view/login";
 const routes = [{
         path: "/",
         name: "Home",
@@ -44,11 +45,15 @@ const routes = [{
         component: Banner,
     },
     {
-        path: '/login',
-        name: 'login',
-        component: Login,
+        path: "/department",
+        name: "department",
+        component: Department,
     },
-
+    {
+        path: "/account_user",
+        name: "account_user",
+        component: AccountUser,
+    },
 
 ];
 const router = createRouter({
