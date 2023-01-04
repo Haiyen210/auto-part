@@ -15,6 +15,15 @@ class AccountUserService {
     delete(id) {
         return http.delete(`/AccountUsers/${id}`);
     }
+    getTrash() {
+        return http.get("/AccountUsers/TrashAccountUsers");
+    }
+    temporaryDelete(data) {
+        return http.post(`/AccountUsers/TemporaryDelete`, data);
+    }
+    repeat(data) {
+        return http.post(`/AccountUsers/RepeatAccountUsers`, data);
+    }
 
 
 }

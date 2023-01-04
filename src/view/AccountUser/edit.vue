@@ -121,6 +121,7 @@ export default {
             url: null,
             ishowImage: false,
             message: "",
+
         }
 
     },

@@ -1,19 +1,21 @@
 <template>
-
     <div class="statbox widget box box-shadow">
+
         <div class="widget-header">
             <div class="row">
                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                    <h4>Add New User</h4>
+                    <h4>Edit account</h4>
                 </div>
             </div>
         </div>
         <div class="widget-content widget-content-area">
-            <form method="post" v-on:submit.prevent="onSubmitForm">
+            <form method="post" v-on:submit.prevent="onSubmitEditForm" v-if="accounts">
+                <input type="hidden" v-model="accounts.id">
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
+                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Account
+                        Name</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="code" placeholder="" v-model="account.code"
+                        <input type="text" class="form-control" id="code" placeholder="" v-model="accounts.code"
                             :class="{ error: codeError.status, success: codeSuccess.status }" />
                         <p class="text-error" v-if="codeError.status">{{ codeError.text }}</p>
                         <p class="success-text" v-if="codeSuccess.status">{{ codeSuccess.text }}
@@ -24,7 +26,7 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">FullName</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="name" placeholder="" v-model="account.name"
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="accounts.name"
                             :class="{ error: nameError.status, success: nameSuccess.status }">
                         <p class="text-error" v-if="nameError.status">{{ nameError.text }}</p>
                         <p class="success-text" v-if="nameSuccess.status">{{ nameSuccess.text }}
@@ -34,7 +36,7 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Email</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="email" placeholder="" v-model="account.email"
+                        <input type="text" class="form-control" id="email" placeholder="" v-model="accounts.email"
                             :class="{ error: emailError.status, success: emailSuccess.status }">
                         <p class="text-error" v-if="emailError.status">{{ emailError.text }}</p>
                         <p class="success-text" v-if="emailSuccess.status">{{ emailSuccess.text }}
@@ -44,7 +46,7 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Phone</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="phone" placeholder="" v-model="account.phone"
+                        <input type="text" class="form-control" id="phone" placeholder="" v-model="accounts.phone"
                             :class="{ error: phoneError.status, success: phoneSuccess.status }">
                         <p class="text-error" v-if="phoneError.status">{{ phoneError.text }}</p>
                         <p class="success-text" v-if="phoneSuccess.status">{{ phoneSuccess.text }}
@@ -55,7 +57,7 @@
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Password</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="password" class="form-control" id="password" placeholder=""
-                            v-model="account.password"
+                            v-model="accounts.password"
                             :class="{ error: passwordError.status, success: passwordSuccess.status }">
                         <p class="text-error" v-if="passwordError.status">{{ passwordError.text }}</p>
                         <p class="success-text" v-if="passwordSuccess.status">{{ passwordSuccess.text }}
@@ -65,7 +67,7 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Address</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="address" placeholder="" v-model="account.address"
+                        <input type="text" class="form-control" id="address" placeholder="" v-model="accounts.address"
                             :class="{ error: addressError.status, success: addressSuccess.status }">
                         <p class="text-error" v-if="addressError.status">{{ addressError.text }}</p>
                         <p class="success-text" v-if="addressSuccess.status">{{ addressSuccess.text }}
@@ -76,35 +78,30 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Date of birth</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="date" class="form-control" id="birthday" placeholder="" v-model="account.birthday">
-
+                        <input type="text" class="form-control" id="birthday" placeholder="" v-model="accounts.birthday">
                     </div>
                 </div>
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Department</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select class="form-control  basic" v-model="account.departmentId" id="departmentId">
+                        <select class="form-control  basic" v-model="accounts.departmentId" id="departmentId">
                             <option value=""> Choose Department:</option>
                             <option v-for="item in department" :key="item.id"
-                                :selected="account.departmentId === item.id" v-bind:value="item.id">{{ item.name }}
+                                :selected="accounts.departmentId === item.id" v-bind:value="item.id">{{ item.name }}
                             </option>
                         </select>
-
                     </div>
                 </div>
                 <div class="form-group row mb-4">
                     <label for="role" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Role</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select class="form-control  basic" v-model="account.role" id="role"
-                            :class="{ error: roleError.status, success: roleSuccess.status }">
+                        <select class="form-control  basic" v-model="accounts.role" id="role">
                             <option value=""> Choose Role:</option>
-                            <option v-bind:value="0">Admin WareHouse</option>
-                            <option v-bind:value="1">Admin Factory</option>
-                            <option v-bind:value="2">Admin Management</option>
+                            <option v-bind:value="0" :selected="accounts.role == 0">Admin WareHouse</option>
+                            <option v-bind:value="1" :selected="accounts.role == 1">Admin Factory</option>
+                            <option v-bind:value="2" :selected="accounts.role == 2">Admin Management</option>
                         </select>
-                        <p class="text-error" v-if="roleError.status">{{ roleError.text }}</p>
-                        <p class="success-text" v-if="roleSuccess.status">{{ roleSuccess.text }}
-                        </p>
+                        
                     </div>
                 </div>
                 <fieldset class="form-group mb-4">
@@ -112,15 +109,35 @@
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Gender</label>
                         <div class="col-xl-10 col-lg-9 col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="account.gender" :value="0"
-                                    id="gender" style="width: 16px;height: 16px;" />
+                                <input class="form-check-input" type="radio" v-model="accounts.gender" :value="true"
+                                    :checked="accounts.gender === true" id="gender" style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckDefault"> FeMale
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="account.gender" :value="1"
-                                    id="gender" style="width: 16px;height: 16px;" checked />
+                                <input class="form-check-input" type="radio" v-model="accounts.gender" :value="false"
+                                    :checked="accounts.gender === false" id="gender"
+                                    style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckChecked"> Male </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-group mb-4">
+                    <div class="row">
+                        <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Status</label>
+                        <div class="col-xl-10 col-lg-9 col-sm-10">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" v-model="accounts.status" :value="true"
+                                    :checked="accounts.status === true" id="status" style="width: 16px;height: 16px;" />
+                                <label class="form-check-label" for="flexCheckDefault"> Action
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" v-model="accounts.status" :value="false"
+                                    :checked="accounts.status === false" id="status"
+                                    style="width: 16px;height: 16px;" />
+                                <label class="form-check-label" for="flexCheckChecked"> No Action </label>
                             </div>
                         </div>
                     </div>
@@ -133,33 +150,24 @@
             </form>
         </div>
     </div>
-
 </template>
 <script>
-import AccountService from '@/services/AccountUserService.js';
-import DepartmentService from '@/services/DepartmentService.js';
+import AccountService from '@/services/AccountAdminService';
+import DepartmentService from '@/services/DepartmentService';
+// import 'mosha-vue-toastify/dist/style.css';
+// import { createToast } from 'mosha-vue-toastify';
 export default {
+    props: ['account'],
+
     data() {
+
         return {
-            message: "",
-            currentImage: undefined,
-            department: null,
+            accounts: this.account,
             url: null,
-            ID: null,
-            account: {
-                id: null,
-                code: "",
-                name: "",
-                email: "",
-                phone: "",
-                password: "",
-                address: "",
-                birthday: "",
-                departmentId: "",
-                role: "",
-                gender: "",
-                status: true
-            },
+            ishowImage: false,
+            category: null,
+            message: "",
+            department:null,
             codeError: {
                 text: "",
                 status: false,
@@ -224,7 +232,9 @@ export default {
                 text: "",
                 status: false,
             }
+
         }
+
 
     },
     mounted() {
@@ -241,21 +251,22 @@ export default {
 
     },
     methods: {
-        onSubmitForm() {
-            if (this.account.code.length == 0) {
+
+        onSubmitEditForm() {
+            if (this.accounts.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true
                 }
 
-            } else if (this.account.code.length < 5) {
+            } else if (this.accounts.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
 
 
-            } else if (this.account.code.length >= 5) {
+            } else if (this.accounts.code.length >= 5) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -271,20 +282,20 @@ export default {
                 }
             }
 
-            if (this.account.name.length == 0) {
+            if (this.accounts.name.length == 0) {
                 this.nameError = {
                     text: "FullName cannot be empty!",
                     status: true
                 }
 
-            } else if (this.account.name.length < 6 || this.account.name.length > 50) {
+            } else if (this.accounts.name.length < 6 || this.accounts.name.length > 50) {
                 this.nameError = {
                     text: "FullName must be between 6 and 50 characters",
                     status: true
                 }
 
 
-            } else if (this.account.name.length > 6 || this.account.name.length < 50) {
+            } else if (this.accounts.name.length > 6 || this.accounts.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
                     status: true
@@ -301,13 +312,13 @@ export default {
             }
 
             const regex = /^\w+([.-]?\w+)*@[a-z]+([.-]?\w+)*(.\w{2,3})+$/;
-            if (this.account.email.length == 0) {
+            if (this.accounts.email.length == 0) {
                 this.emailError.text = "Email cannot be empty!",
                     this.emailError.status = true
-            } else if (!regex.test(this.account.email)) {
+            } else if (!regex.test(this.accounts.email)) {
                 this.emailError.text = "Email is not in the correct format !",
                     this.emailError.status = true
-            } else if (regex.test(this.account.email)) {
+            } else if (regex.test(this.accounts.email)) {
                 this.emailSuccess.text = "Success!!";
                 this.emailSuccess.status = true;
                 this.emailError.status = false
@@ -316,18 +327,18 @@ export default {
                     this.emailError.status = false
             }
 
-            if (this.account.phone.length == 0) {
+            if (this.accounts.phone.length == 0) {
                 this.phoneError = {
                     text: "Phone cannot be empty",
                     status: true
                 }
 
-            } else if (this.account.phone.length != 10) {
+            } else if (this.accounts.phone.length != 10) {
                 this.phoneError = {
                     text: "Phone must contain 10 characters ",
                     status: true
                 }
-            } else if (this.account.phone.length < 11 && this.account.phone.length > 9) {
+            } else if (this.accounts.phone.length < 11 && this.accounts.phone.length > 9) {
                 this.phoneSuccess = {
                     text: "Success!",
                     status: true
@@ -342,18 +353,18 @@ export default {
                     status: false
                 }
             }
-            if (this.account.password.length == 0) {
+            if (this.accounts.password.length == 0) {
                 this.passwordError = {
                     text: "Password cannot be empty",
                     status: true
                 }
 
-            } else if (this.account.password.length < 6) {
+            } else if (this.accounts.password.length < 6) {
                 this.passwordError = {
                     text: "Password must contain at least 6 characters ",
                     status: true
                 }
-            } else if (this.account.password.length >= 6) {
+            } else if (this.accounts.password.length >= 6) {
                 this.passwordSuccess = {
                     text: "Success!",
                     status: true
@@ -369,20 +380,20 @@ export default {
                 }
             }
 
-            if (this.account.address.length == 0) {
+            if (this.accounts.address.length == 0) {
                 this.addressError = {
                     text: "Address cannot be empty",
                     status: true
                 }
 
-            } else if (this.account.address.length < 6 || this.account.address.length > 50) {
+            } else if (this.accounts.address.length < 6 || this.accounts.address.length > 50) {
                 this.addressError = {
                     text: "Address must be between 6 and 50 characters",
                     status: true
                 }
 
 
-            } else if (this.account.address.length > 6 || this.account.address.length < 50) {
+            } else if (this.accounts.address.length > 6 || this.accounts.address.length < 50) {
                 this.addressSuccess = {
                     text: "Success!",
                     status: true
@@ -397,13 +408,13 @@ export default {
                     status: false
                 }
             }
-            if (this.account.role.length == 0) {
+            if (this.accounts.role.length == 0) {
                 this.roleError = {
                     text: "Role cannot be empty!",
                     status: true
                 }
 
-            } else if (this.account.role.length > 0) {
+            } else if (this.accounts.role.length > 0) {
                 this.roleSuccess = {
                     text: "Success!",
                     status: true
@@ -418,40 +429,27 @@ export default {
                     status: false
                 }
             }
-
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
-                if (this.account.gender.length == 0) {
-                    this.account.gender = false;
-                }
-                AccountService.create(this.account)
-                    .then((res) => {
-                        //Perform Success Action
-                        if (this.account.gender.length == 0) {
-                            this.account.gender = false;
-                        }
-                        this.ID = res.data.id;
-                        this.account.id = this.ID;
-                        this.account.status = true;
-                        this.account.gender == '' ? this.account.gender = true : this.account.gender = false;
-                        console.log(this.account);
-                        // createToast({
-                        //     title: 'Success',
-                        //     description: 'Thêm mới tài khoản Success',
-                        //     type: 'success',
-                        //     timeout: 5000,
+            AccountService.update(this.accounts)
+                .then((res) => {
+                    console.log(res);
+                    // createToast({
+                    //     title: 'Thành công',
+                    //     description: 'Sửa tài khoản thành công',
+                    //     type: 'success',
+                    //     timeout: 5000,
 
-                        // })
-                        this.$emit("ShowData", this.account);
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
+                    // })    
+                })
+                .catch((error) => {
+                    // error.response.status Check status code
+                    console.log(error);
+                })
+                .finally(() => {
+                    //Perform action in always
+                });
+            this.$emit("ShowEditData", this.accounts);
             }
-
         },
     }
 

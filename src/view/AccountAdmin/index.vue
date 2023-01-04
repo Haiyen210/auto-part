@@ -8,8 +8,7 @@
                 <div class="row layout-top-spacing">
                     <div id="tableProgress" class="col-lg-12 col-12 layout-spacing">
 
-                        <div class="statbox widget box box-shadow"
-                            v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
+                        <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false">
                             <div class="row">
                                 <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center">
                                     <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd">Add New<svg
@@ -17,16 +16,6 @@
                                             fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                             <path
                                                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                        </svg></a>
-                                    <a style="margin-left: 5%;" type="submit" class="btn btn-success mt-3"
-                                        v-on:click.prevent="onTrash">Trash<svg viewBox="-61 0 512 512"
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                            <path
-                                                d="m255 0h-120c-24.8125 0-45 20.1875-45 45v15h-60c-16.570312 0-30 13.429688-30 30v30c0 16.566406 13.429688 30 30 30h92.566406c25.570313 0 36.390625-19.378906 44.25-25.605469 2.796875-2.796875 6.664063-4.394531 10.605469-4.394531h182.578125c16.570312 0 30-13.433594 30-30 0-16.570312-13.429688-30-30-30h-60v-15c0-24.8125-20.1875-45-45-45zm15 60h-150v-15c0-8.277344 6.722656-15 15-15h120c8.277344 0 15 6.722656 15 15zm0 0" />
-                                            <path
-                                                d="m360 482c0 16.570312-13.429688 30-30 30s-30-13.429688-30-30 13.429688-30 30-30 30 13.429688 30 30zm0 0" />
-                                            <path
-                                                d="m330 422c1.40625 0 2.726562.320312 4.113281.414062l24.589844-272.414062h-175.070313c-3.925781 2.851562-22.941406 30-61.070312 30h-88.65625l23.867188 290.707031c1.90625 23.15625 21.605468 41.292969 44.855468 41.292969h175.714844c-5.167969-8.859375-8.34375-19.023438-8.34375-30 0-33.089844 26.910156-60 60-60zm-68.816406-40.707031c-6.273438 5.359375-15.761719 4.671875-21.140625-1.65625-5.390625-6.285157-4.644531-15.761719 1.65625-21.136719 4.832031-4.132812 7.472656-12.070312 3.179687-19.21875l-37.019531-61.6875c-3.9375-6.574219-10.3125-7.277344-12.859375-7.277344s-8.921875.703125-12.859375 7.277344l-37.019531 61.6875c-5.976563 9.96875 1.15625 22.71875 12.863281 22.71875h15.804687l-4.394531-4.394531c-5.859375-5.859375-5.859375-15.351563 0-21.210938s15.351563-5.859375 21.210938 0l29.980469 29.980469c5.835937 5.820312 5.875 15.390625 0 21.25l-29.980469 29.980469c-5.859375 5.859375-15.351563 5.859375-21.210938 0s-5.859375-15.351563 0-21.210938l4.394531-4.394531h-15.804687c-34.972656 0-56.597656-38.125-38.585937-68.160156l37.015624-61.683594c8.203126-13.683594 22.632813-21.839844 38.585938-21.839844s30.382812 8.15625 38.585938 21.839844l37.015624 61.683594c11.351563 18.925781 7.394532 43.082031-9.417968 57.453125zm0 0" />
                                         </svg></a>
                                 </div>
                                 <div
@@ -198,16 +187,14 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
-                            v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
+                        <a href="" v-if="isShowEdit == true || isShowAdd == true" v-on:click.prevent="back_to"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
                             height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
                                 <path
                                     d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                             </svg></a>
                         <CustomerEdit :customer="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
                         <CustomerAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                        <CustomerTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
-
                     </div>
                 </div>
             </div>
@@ -221,7 +208,7 @@
 }
 
 .btn-paginate {
-    n-inline: 5px;
+    margin-inline: 5px;
     cursor: pointer;
     border-style: groove;
     border-radius: 100%;
@@ -239,15 +226,15 @@
 <script>
 import CustomerEdit from "../AccountUser/edit.vue";
 import CustomerAdd from "../AccountUser/add.vue";
-import AccountUserService from "@/services/AccountUserService.js";
+import CustomerService from "@/services/AccountUserService";
 import "vue-awesome-paginate/dist/style.css";
-import CustomerTrash from "@/view/AccountUser/trash.vue"
+// import 'mosha-vue-toastify/dist/style.css';
+// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
         CustomerAdd,
-        CustomerEdit,
-        CustomerTrash
+        CustomerEdit
     },
     data() {
         return {
@@ -255,8 +242,6 @@ export default {
             showEdit: null,
             isShowEdit: false,
             isShowAdd: false,
-            isShowTrash: false,
-            showTrash: null,
             query: "",
             current: 1,
             pageSize: 5,
@@ -264,7 +249,7 @@ export default {
         }
     },
     created() {
-        AccountUserService.getAll()
+        CustomerService.getAll()
             .then((res) => {
                 this.customer = res.data;
                 console.log(res);
@@ -345,14 +330,10 @@ export default {
         },
         back_to() {
             this.isShowEdit = false,
-            this.isShowAdd = false,
-            this.isShowTrash = false
+                this.isShowAdd = false
         },
         onAdd() {
             this.isShowAdd = true
-        },
-        onTrash() {
-            this.isShowTrash = true
         },
         getData(data) {
             this.customer.push(data);
@@ -361,14 +342,6 @@ export default {
             this.$forceUpdate();
 
         },
-        getDeleteData(data) {
-            this.t.push(data);
-            console.log(data);
-            this.isShowTrash = false;
-            this.$forceUpdate();
-
-        },
-
         getEdit(data) {
             for (let i = 0; i < this.customer.length; i++) {
                 if (this.customer[i].id == data.id) {
@@ -382,12 +355,25 @@ export default {
             this.isShowEdit = false;
         },
         onDelete(item) {
-            if (confirm("Are you sure you want to delete " + item.code)) {
+            if (confirm("Are you sure you want to delete the code account " + item.code)) {
                 console.log(item.id);
-                AccountUserService.temporaryDelete(item)
+                // let login = JSON.parse(localStorage.getItem("user"));
+                CustomerService.delete(item.id)
                     .then(response => {
                         console.log(response);
                         this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
+                        // createToast({
+                        //     title: 'Thành công',
+                        //     description: 'Xóa tài khoản thành công',
+                        //     type: 'success',
+                        //     timeout: 5000,
+
+                        // })
+                        // if (item.email == login.email) {
+                        //     localStorage.removeItem("user");
+                        //     window.location.href = "/login"
+                        // }
+
                     })
                     .catch(function (error) {
                         console.log(error)

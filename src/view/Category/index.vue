@@ -12,7 +12,7 @@
                             v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
                             <div class="row">
                                 <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center">
-                                    <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd">Add New<svg
+                                    <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd">Add<svg
                                             xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                             <path
@@ -20,7 +20,7 @@
                                         </svg></a>
                                     <a style="margin-left: 5%;" type="submit" class="btn btn-success mt-3"
                                         v-on:click.prevent="onTrash">Trash<svg viewBox="-61 0 512 512"
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" >
                                             <path
                                                 d="m255 0h-120c-24.8125 0-45 20.1875-45 45v15h-60c-16.570312 0-30 13.429688-30 30v30c0 16.566406 13.429688 30 30 30h92.566406c25.570313 0 36.390625-19.378906 44.25-25.605469 2.796875-2.796875 6.664063-4.394531 10.605469-4.394531h182.578125c16.570312 0 30-13.433594 30-30 0-16.570312-13.429688-30-30-30h-60v-15c0-24.8125-20.1875-45-45-45zm15 60h-150v-15c0-8.277344 6.722656-15 15-15h120c8.277344 0 15 6.722656 15 15zm0 0" />
                                             <path
@@ -46,7 +46,7 @@
                             <div class="widget-header">
                                 <div class="row">
                                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                        <h4>Customer Management</h4>
+                                        <h4>Category Management</h4>
                                     </div>
                                 </div>
                             </div>
@@ -56,40 +56,23 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Code</th>
-                                                <th>FullName</th>
-                                                <th>Gender</th>
-                                                <th>Address</th>
-                                                <th>Department</th>
+                                                <th>Name</th>
                                                 <th>Status</th>
-                                                <th>Role</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                         </thead>
+
                                         <tbody v-if="query">
-                                            <tr v-for="item in customerFilte" :key="item.id">
+                                            <tr v-for="item in categoryFilte" :key="item.id">
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>
-                                                    <p class="text-danger">
-                                                        <span v-if="item.gender">FeMale</span>
-                                                        <span v-if="!item.gender">Male</span>
-                                                    </p>
-                                                </td>
-                                                <td>{{ item.address }}</td>
-                                                <td>{{ item.departmentId }}</td>
                                                 <td>
                                                     <p class="text-success">
                                                         <span v-if="item.status">Action</span>
                                                         <span v-if="!item.status">No Action</span>
                                                     </p>
                                                 </td>
-                                                <td>
-                                                    <p class="">
-                                                        <span v-if="item.role == 0">Admin WareHouse</span>
-                                                        <span v-if="item.role == 1">Admin Factory</span>
-                                                        <span v-if="item.role == 2">Admin Management</span>
-                                                    </p>
-                                                </td>
+
 
                                                 <td class="text-center">
                                                     <a href="javascript:void(0);" data-toggle="tooltip"
@@ -125,24 +108,9 @@
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
-                                                    <p class="text-danger">
-                                                        <span v-if="item.gender">FeMale</span>
-                                                        <span v-if="!item.gender">Male</span>
-                                                    </p>
-                                                </td>
-                                                <td>{{ item.address }}</td>
-                                                <td>{{ item.departmentId }}</td>
-                                                <td>
                                                     <p class="text-success">
                                                         <span v-if="item.status">Action</span>
                                                         <span v-if="!item.status">No Action</span>
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="">
-                                                        <span v-if="item.role == 0">Admin WareHouse</span>
-                                                        <span v-if="item.role == 1">Admin Factory</span>
-                                                        <span v-if="item.role == 2">Admin Management</span>
                                                     </p>
                                                 </td>
                                                 <td class="text-center">
@@ -187,8 +155,7 @@
                                                 <span v-on:click.prevent="onCurrent(item)"
                                                     v-bind:class="{ isActive: (item === current), 'text-dark': isActive == false }"
                                                     class="btn-paginate pagination-link go-to has-text-orange"
-                                                    aria-label="Goto page 1">{{ item
-}}</span>
+                                                    aria-label="Goto page 1">{{ item }}</span>
                                             </li>
                                             <li>
                                                 <a class="btn-paginate" @click="next"> Next </a>
@@ -200,14 +167,14 @@
                         </div>
                         <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
                             v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                            height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
+                                viewBox="0 0 16 16">
                                 <path
                                     d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                             </svg></a>
-                        <CustomerEdit :customer="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
-                        <CustomerAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                        <CustomerTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
-
+                        <CategoryEdit :category="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
+                        <CategoryAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
+                        <CategoryTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
                     </div>
                 </div>
             </div>
@@ -221,7 +188,7 @@
 }
 
 .btn-paginate {
-    n-inline: 5px;
+    margin-inline: 5px;
     cursor: pointer;
     border-style: groove;
     border-radius: 100%;
@@ -237,26 +204,28 @@
 }
 </style>
 <script>
-import CustomerEdit from "../AccountUser/edit.vue";
-import CustomerAdd from "../AccountUser/add.vue";
-import AccountUserService from "@/services/AccountUserService.js";
+import CategoryEdit from "../Category/edit.vue";
+import CategoryAdd from "../Category/add.vue";
+import CategoryTrash from "../Category/trash.vue";
+import CategoryProductService from "@/services/CategoryProductService";
 import "vue-awesome-paginate/dist/style.css";
-import CustomerTrash from "@/view/AccountUser/trash.vue"
+// import 'mosha-vue-toastify/dist/style.css';
+// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
-        CustomerAdd,
-        CustomerEdit,
-        CustomerTrash
+        CategoryAdd,
+        CategoryEdit,
+        CategoryTrash,
     },
     data() {
         return {
-            customer: null,
+            category: null,
             showEdit: null,
+            showTrash: null,
             isShowEdit: false,
             isShowAdd: false,
             isShowTrash: false,
-            showTrash: null,
             query: "",
             current: 1,
             pageSize: 5,
@@ -264,9 +233,9 @@ export default {
         }
     },
     created() {
-        AccountUserService.getAll()
+        CategoryProductService.getAll()
             .then((res) => {
-                this.customer = res.data;
+                this.category = res.data;
                 console.log(res);
             })
             .catch((error) => {
@@ -276,22 +245,23 @@ export default {
                 //Perform action in always
             })
 
+
     },
     computed: {
         resultCount() {
-            return this.customer && this.customer.length
+            return this.category && this.category.length
         },
-        customerFilte() {
+        categoryFilte() {
             if (this.query) {
-                return this.customer.filter((customer) => {
+                return this.category.filter((category) => {
                     return (
-                        customer.name
+                        category.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.customer;
+                return this.category;
             }
 
         },
@@ -311,10 +281,10 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.customer.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.category.slice(this.indexStart, this.indexEnd, this.totalPaginate);
             }
             else {
-                return this.customer;
+                return this.category;
             }
         }
 
@@ -345,8 +315,8 @@ export default {
         },
         back_to() {
             this.isShowEdit = false,
-            this.isShowAdd = false,
-            this.isShowTrash = false
+                this.isShowAdd = false,
+                this.isShowTrash = false
         },
         onAdd() {
             this.isShowAdd = true
@@ -355,39 +325,38 @@ export default {
             this.isShowTrash = true
         },
         getData(data) {
-            this.customer.push(data);
+            this.category.push(data);
             console.log(data);
             this.isShowAdd = false;
             this.$forceUpdate();
 
         },
         getDeleteData(data) {
-            this.t.push(data);
+            this.category.push(data);
             console.log(data);
             this.isShowTrash = false;
             this.$forceUpdate();
 
         },
-
         getEdit(data) {
-            for (let i = 0; i < this.customer.length; i++) {
-                if (this.customer[i].id == data.id) {
-                    this.customer[i] = data;
+            for (let i = 0; i < this.category.length; i++) {
+                if (this.category[i].id == data.id) {
+                    this.category[i] = data;
                     this.$forceUpdate();
                     break;
                 }
             }
 
-            console.log(this.customer);
+            console.log(this.category);
             this.isShowEdit = false;
         },
         onDelete(item) {
             if (confirm("Are you sure you want to delete " + item.code)) {
                 console.log(item.id);
-                AccountUserService.temporaryDelete(item)
+                CategoryProductService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
-                        this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
+                        this.category.splice(this.category.findIndex(e => e.id == item.id), 1).push(response.data);
                     })
                     .catch(function (error) {
                         console.log(error)
