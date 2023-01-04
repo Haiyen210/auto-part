@@ -1,25 +1,21 @@
 import http from "../http-common";
 class DepartmentService {
     getAll() {
-        return http.get("/Department");
+        return http.get("/Departments");
     }
     get(id) {
-        return http.get(`/Department/${id}`);
+        return http.get(`/Departments/${id}`);
     }
     create(data) {
-        return http.post("/Department", data);
+        return http.post("/Departments", data);
     }
     update(data) {
-        return http.post(`/Department/PutDepartment`, data);
+        return http.post(`/Departments/${data.id}`, data);
     }
     delete(id) {
-            return http.delete(`/Department/${id}`);
-        }
-        //   deleteAll() {
-        //     return http.delete(`/tutorials`);
-        //   }
-        //   findByTitle(title) {
-        //     return http.get(`/tutorials?title=${title}`);
-        //   }
+        return http.delete(`/Departments/${id}`);
+    }
+
+
 }
 export default new DepartmentService();

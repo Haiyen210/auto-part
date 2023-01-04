@@ -123,7 +123,6 @@ export default {
             message: "",
         }
 
-
     },
     mounted(){
         WareHouseService.getAll()

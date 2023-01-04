@@ -11,12 +11,7 @@
         <div class="widget-content widget-content-area">
             <form method="post" v-on:submit.prevent="onSubmitForm">
                 <div class="form-group row mb-4">
-<<<<<<< HEAD:src/view/AccountUser/add.vue
                     <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
-=======
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Account
-                        Name</label>
->>>>>>> 1313d8422f1ebe9c0c7c31e600fedc877dba7db4:src/view/AccountAdmin/add.vue
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="text" class="form-control" id="code" placeholder="" v-model="account.code"
                             :class="{ error: codeError.status, success: codeSuccess.status }" />
@@ -141,14 +136,8 @@
 
 </template>
 <script>
-<<<<<<< HEAD:src/view/AccountUser/add.vue
-import AccountService from '@/services/AccountUserService';
-=======
-import AccountService from '@/services/AccountAdminService';
-import DepartmentService from '@/services/DepartmentService';
->>>>>>> 1313d8422f1ebe9c0c7c31e600fedc877dba7db4:src/view/AccountAdmin/add.vue
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
+import AccountService from '@/services/AccountUserService.js';
+import DepartmentService from '@/services/DepartmentService.js';
 export default {
     data() {
         return {
@@ -443,10 +432,7 @@ export default {
                         this.ID = res.data.id;
                         this.account.id = this.ID;
                         this.account.status = true;
-<<<<<<< HEAD:src/view/AccountUser/add.vue
                         this.account.gender == '' ? this.account.gender = true : this.account.gender = false;
-=======
->>>>>>> 1313d8422f1ebe9c0c7c31e600fedc877dba7db4:src/view/AccountAdmin/add.vue
                         console.log(this.account);
                         // createToast({
                         //     title: 'Success',
