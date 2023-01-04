@@ -102,8 +102,8 @@ export default {
                 code: "",
                 name: "",
                 quantity: "",
-                status: true,
-                factoryID: ""
+                status: 1,
+                factorys: ""
                 
             },
             codeError: {
@@ -220,14 +220,14 @@ export default {
                     status: false
                 }
             }
-            if (this.warehouse.factoryID.length == 0) {
+            if (this.warehouse.factorys.length == 0) {
                 this.factoryIDError = {
                     text: "Password cannot be empty",
                     status: true
                 }
 
             
-            } else if (this.warehouse.password.length > 0) {
+            } else if (this.warehouse.factorys.length > 0) {
                 this.factoryIDSuccess = {
                     text: "Success!",
                     status: true
@@ -252,13 +252,7 @@ export default {
                         this.warehouse.status = true;
                         
                         console.log(this.warehouse);
-                        // createToast({
-                        //     title: 'Success',
-                        //     description: 'Thêm mới tài khoản Success',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
+                       
                         this.$emit("ShowData", this.warehouse);
                     })
                     .catch((error) => {
