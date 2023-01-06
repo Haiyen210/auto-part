@@ -1,7 +1,8 @@
 <template>
     <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
         <div class="row">
-            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3" style="margin-left: -23px;">
+            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
+                style="margin-left: -23px;">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -133,8 +134,8 @@
                             <span v-on:click.prevent="onCurrent(item)"
                                 v-bind:class="{ isActive: (item === current), 'text-dark': isActive == false }"
                                 class="btn-paginate pagination-link go-to has-text-orange" aria-label="Goto page 1">{{
-        item
-}}</span>
+                                    item
+                                }}</span>
                         </li>
                         <li>
                             <a class="btn-paginate" @click="next"> Next </a>
@@ -170,8 +171,6 @@
 <script>
 import CategoryProductService from "@/services/CategoryProductService";
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
@@ -278,7 +277,8 @@ export default {
         },
         onDelete(item) {
             if (confirm("Are you sure you want to delete " + item.code)) {
-                console.log(item.id);
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 CategoryProductService.delete(item.id)
                     .then(response => {
                         console.log(response);
@@ -287,6 +287,9 @@ export default {
                     .catch(function (error) {
                         console.log(error)
                     })
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         }
     }

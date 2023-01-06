@@ -338,6 +338,8 @@ export default {
         onDelete(item) {
             console.log(item.id);
             if (confirm("Bạn có chắc muốn xóa banner mã " + item.code)) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 BannerService.delete(item.id)
                     .then((response) => {
                         console.log(response);
@@ -347,17 +349,14 @@ export default {
                                 1
                             )
                             .push(response.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Xóa banner thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
+                      
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
 

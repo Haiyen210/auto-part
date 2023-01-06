@@ -159,7 +159,7 @@ export default {
                 address: "",
                 birthday: "",
                 departmentId: "",
-                departmentName:"",
+                departmentName: "",
                 role: "",
                 gender: "",
                 status: true
@@ -246,6 +246,7 @@ export default {
     },
     methods: {
         onSubmitForm() {
+
             if (this.account.code.length == 0) {
                 this.codeError = {
                     text: "Account name cannot be empty",
@@ -315,7 +316,6 @@ export default {
                     status: false
                 }
             }
-
             const regex = /^\w+([.-]?\w+)*@[a-z]+([.-]?\w+)*(.\w{2,3})+$/;
             if (this.account.email.length == 0) {
                 this.emailError.text = "Email cannot be empty!",
@@ -339,7 +339,6 @@ export default {
                 this.emailError.text = "",
                     this.emailError.status = false
             }
-
             if (this.account.phone.length == 0) {
                 this.phoneError = {
                     text: "Phone cannot be empty",
@@ -442,29 +441,36 @@ export default {
                     status: false
                 }
             }
-           
+
 
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
                 if (this.account.gender == "") {
                     this.account.gender = false;
                 }
-                AccountService.create(this.account)
-                    .then((res) => {
-                        //Perform Success Action
-                        this.ID = res.data.id;
-                        this.account.id = this.ID;
-                        this.account.status = true;
-                       this.account.departmentName = res.data.departmentName     
-                        this.$emit("ShowData", this.account);
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    AccountService.create(this.account)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.ID = res.data.id;
+                            this.account.id = this.ID;
+                            this.account.status = true;
+                            this.account.departmentName = res.data.departmentName
+                            this.$emit("ShowData", this.account);
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
+
+
 
         },
     }

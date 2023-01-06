@@ -78,7 +78,8 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Date of birth</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="birthday" placeholder="" v-model="accounts.birthday">
+                        <input type="text" class="form-control" id="birthday" placeholder=""
+                            v-model="accounts.birthday">
                     </div>
                 </div>
                 <div class="form-group row mb-4">
@@ -101,7 +102,7 @@
                             <option v-bind:value="1" :selected="accounts.role == 1">Admin Factory</option>
                             <option v-bind:value="2" :selected="accounts.role == 2">Admin Management</option>
                         </select>
-                        
+
                     </div>
                 </div>
                 <fieldset class="form-group mb-4">
@@ -167,7 +168,7 @@ export default {
             ishowImage: false,
             category: null,
             message: "",
-            department:null,
+            department: null,
             codeError: {
                 text: "",
                 status: false,
@@ -253,6 +254,7 @@ export default {
     methods: {
 
         onSubmitEditForm() {
+
             if (this.accounts.code.length == 0) {
                 this.codeError = {
                     text: "Account name cannot be empty",
@@ -449,22 +451,28 @@ export default {
                     status: false
                 }
             }
-           
+
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
-            AccountService.update(this.accounts)
-                .then((res) => {
-                    this.account.departmentName = res.data.departmentName     
-                })
-                .catch((error) => {
-                    // error.response.status Check status code
-                    console.log(error);
-                })
-                .finally(() => {
-                    //Perform action in always
-                });
-            this.$emit("ShowEditData", this.accounts);
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    AccountService.update(this.accounts)
+                        .then((res) => {
+                            this.accounts.departmentName = res.data.departmentName
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowEditData", this.accounts);
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
-        },
+
+        }
     }
 
 }

@@ -90,9 +90,7 @@
                             <span>Banner</span>
 
                         </div>
-
                     </router-link>
-
                 </li>
                 <li class="menu">
                     <router-link :to="{ name: 'factory' }" href="#" data-toggle="collapse" aria-expanded="false"
@@ -119,7 +117,7 @@
 
                 </li>
 
-                <li class="menu">
+                <li class="menu" >
                     <router-link :to="{ name: 'warehouse' }" href="#" data-toggle="collapse" aria-expanded="false"
                         class="dropdown-toggle">
                         <div class="">
@@ -191,10 +189,6 @@
                     </router-link>
 
                 </li>
-
-
-
-
             </ul>
 
         </nav>
@@ -202,3 +196,4 @@
     </div>
     <!--  END SIDEBAR  -->
 </template>
+

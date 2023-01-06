@@ -48,9 +48,9 @@
                         </p>
                     </div>
                 </div>
-              
+
                 <div class="form-group row mb-4">
-                 <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Images</label>
+                    <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Images</label>
                     <div class="col-4">
                         <p class="btn btn-success btn-sm" @click="$refs.file.click()">
                             Choose file
@@ -58,7 +58,8 @@
                     </div>
                     <div class="col-8">
                         <label class="btn btn-default p-0">
-                            <input type="file" accept="image/*" ref="file" name="file" @change="selectImage" :hidden="true" />
+                            <input type="file" accept="image/*" ref="file" name="file" @change="selectImage"
+                                :hidden="true" />
                         </label>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-sm-10">
@@ -80,7 +81,7 @@ import UploadService from "../../services/UploadService";
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
-    
+
     props: ["banners"],
     name: "add-banner",
     data() {
@@ -95,7 +96,7 @@ export default {
                 id: null,
                 code: "",
                 name: "",
-                description:"",
+                description: "",
                 image: "",
                 status: true,
             },
@@ -124,18 +125,19 @@ export default {
                 status: false,
             },
         };
-    }, 
-    mounted(){
-        BannerService.getAll().then((res)=>{
+    },
+    mounted() {
+        BannerService.getAll().then((res) => {
             this.a = res.data
         })
     },
     methods: {
         onSubmitForm() {
+
             var codeSame;
             for (let i = 0; i < this.a.length; i++) {
                 const element = this.a[i];
-                if(this.banner.code == element.code){
+                if (this.banner.code == element.code) {
                     codeSame = element.code;
                     break;
                 }
@@ -158,8 +160,7 @@ export default {
                     text: "",
                     status: false
                 }
-            }  else if(this.banner.code == codeSame)
-            {
+            } else if (this.banner.code == codeSame) {
                 this.codeError = {
                     text: "Code already exists !",
                     status: true
@@ -168,12 +169,12 @@ export default {
                     text: "",
                     status: false
                 }
-            }else if (this.banner.code.length < 5 || this.banner.code != codeSame) {
+            } else if (this.banner.code.length < 5 || this.banner.code != codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true,
                 };
-                 this.codeError = {
+                this.codeError = {
                     text: "",
                     status: false,
                 };
@@ -207,7 +208,7 @@ export default {
                     text: "Success!",
                     status: true,
                 };
-                 this.nameError = {
+                this.nameError = {
                     text: "",
                     status: false,
                 };
@@ -231,7 +232,7 @@ export default {
                     text: "Success!",
                     status: true,
                 };
-                 this.descriptionError = {
+                this.descriptionError = {
                     text: "",
                     status: false,
                 };
@@ -241,32 +242,37 @@ export default {
                     status: false,
                 };
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true)  {
-                UploadService.upload(this.currentImage)
-                    .then((response) => {
-                        console.log();
-                        this.message = response.data.message;
-                    })
-                    .catch((err) => {
-                        this.message = "Unable to load image ! " + err;
-                        this.currentImage = undefined;
-                    });
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    UploadService.upload(this.currentImage)
+                        .then((response) => {
+                            console.log();
+                            this.message = response.data.message;
+                        })
+                        .catch((err) => {
+                            this.message = "Unable to load image ! " + err;
+                            this.currentImage = undefined;
+                        });
 
-                BannerService.create(this.banner)
-                    .then((res) => {
-                        //Perform Success Action
-                        this.ID = res.data.id;
-                        this.banner.id = this.ID;
-                        console.log(res.data);
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
-                this.$emit("ShowData", this.banner);
+                    BannerService.create(this.banner)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.ID = res.data.id;
+                            this.banner.id = this.ID;
+                            console.log(res.data);
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowData", this.banner);
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
         selectImage() {

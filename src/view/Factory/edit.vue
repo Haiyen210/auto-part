@@ -39,8 +39,7 @@
                         <div class="col-xl-10 col-lg-9 col-sm-10">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" v-model="factorys.status" :value="true"
-                                    :checked="factorys.status === true" id="status"
-                                    style="width: 16px;height: 16px;" />
+                                    :checked="factorys.status === true" id="status" style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckDefault"> Action
                                 </label>
                             </div>
@@ -64,8 +63,6 @@
 </template>
 <script>
 import FactoryService from '@/services/FactoryService';
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     props: ['factory'],
 
@@ -119,7 +116,7 @@ export default {
                     status: false
                 }
 
-            }else if (this.factorys.code.length >= 5 || this.factorys.code == codeSame) {
+            } else if (this.factorys.code.length >= 5) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -170,20 +167,25 @@ export default {
                     status: false
                 }
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true ) {
-            FactoryService.update(this.factorys)
-                .then((res) => {
-                    console.log(res);
-              
-                })
-                .catch((error) => {
-                    // error.response.status Check status code
-                    console.log(error);
-                })
-                .finally(() => {
-                    //Perform action in always
-                });
-            this.$emit("ShowEditData", this.factorys);
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    FactoryService.update(this.factorys)
+                        .then((res) => {
+                            console.log(res);
+
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowEditData", this.factorys);
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
     }

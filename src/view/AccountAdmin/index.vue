@@ -241,8 +241,6 @@ import AccountService from "@/services/AccountAdminService";
 import AccountTrash from "../AccountAdmin/trash.vue";
 
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
@@ -382,8 +380,8 @@ export default {
         },
         onDelete(item) {
             if (confirm("Are you sure you want to delete the code account " + item.code)) {
-                console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 AccountService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
@@ -392,6 +390,9 @@ export default {
                     .catch(function (error) {
                         console.log(error)
                     })
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         }
     }

@@ -175,6 +175,8 @@ export default {
             }
 
             if (this.codeSuccess.status == true && this.nameSuccess.status == true ) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 FactoryService.create(this.factory)
                     .then((res) => {
                         //Perform Success Action
@@ -190,6 +192,9 @@ export default {
                     .finally(() => {
                         //Perform action in always
                     });
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
 
         },

@@ -13,7 +13,8 @@
                 <div class="form-group row mb-4">
                     <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="code" placeholder="" v-model="banners.code"  :class="{ error: codeError.status, success: codeSuccess.status }" />
+                        <input type="text" class="form-control" id="code" placeholder="" v-model="banners.code"
+                            :class="{ error: codeError.status, success: codeSuccess.status }" />
                         <p class="text-error" v-if="codeError.status">
                             {{ codeError.text }}
                         </p>
@@ -25,7 +26,8 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Name</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="name" placeholder="" v-model="banners.name"  :class="{ error: nameError.status, success: nameSuccess.status }" />
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="banners.name"
+                            :class="{ error: nameError.status, success: nameSuccess.status }" />
                         <p class="text-error" v-if="nameError.status">
                             {{ nameError.text }}
                         </p>
@@ -37,8 +39,8 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Description</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="name" placeholder=""
-                            v-model="banners.description" :class="{ error: nameError.status, success: nameSuccess.status }" />
+                        <input type="text" class="form-control" id="name" placeholder="" v-model="banners.description"
+                            :class="{ error: nameError.status, success: nameSuccess.status }" />
                         <p class="text-error" v-if="nameError.status">
                             {{ nameError.text }}
                         </p>
@@ -148,7 +150,7 @@ export default {
             this.ishowImage = true;
         },
         onSubmitEditForm() {
-         
+
             if (this.banners.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
@@ -167,12 +169,12 @@ export default {
                     text: "",
                     status: false
                 }
-            }  else if (this.banners.code.length > 4 || this.banners.code.length < 6 ) {
+            } else if (this.banners.code.length > 4 || this.banners.code.length < 6) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true,
                 };
-                 this.codeError = {
+                this.codeError = {
                     text: "",
                     status: false,
                 };
@@ -206,7 +208,7 @@ export default {
                     text: "Success!",
                     status: true,
                 };
-                 this.nameError = {
+                this.nameError = {
                     text: "",
                     status: false,
                 };
@@ -230,7 +232,7 @@ export default {
                     text: "Success!",
                     status: true,
                 };
-                 this.descriptionError = {
+                this.descriptionError = {
                     text: "",
                     status: false,
                 };
@@ -240,31 +242,36 @@ export default {
                     status: false,
                 };
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true)  {
-            UploadService.upload(this.currentImage)
-                .then((response) => {
-                    console.log();
-                    this.message = response.data.message;
-                })
-                .catch((err) => {
-                    this.message = "Unable to load image  ! " + err;
-                    this.currentImage = undefined;
-                });
-            BannerService.update(this.banners)
-                .then((res) => {
-                    //Perform Success Action
-                    this.banners = res.data;
-                    res.data.files;
-                
-                })
-                .catch((error) => {
-                    // error.response.status Check status code
-                    console.log(error);
-                })
-                .finally(() => {
-                    //Perform action in always
-                });
-            this.$emit("ShowEditData", this.banners);
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    UploadService.upload(this.currentImage)
+                        .then((response) => {
+                            console.log();
+                            this.message = response.data.message;
+                        })
+                        .catch((err) => {
+                            this.message = "Unable to load image  ! " + err;
+                            this.currentImage = undefined;
+                        });
+                    BannerService.update(this.banners)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.banners = res.data;
+                            res.data.files;
+
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowEditData", this.banners);
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
 

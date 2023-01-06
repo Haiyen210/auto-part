@@ -1,6 +1,6 @@
 <template>
     <div class="statbox widget box box-shadow" >
-        <div class="row">
+        <div class="row" style="margin-top: 26px;">
             <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
                 style="margin-left: -23px;">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
                                 </p>
                             </td>
                             <td>{{ item.address }}</td>
-                            <td>{{ item.departmentId }}</td>
+                            <td>{{ item.departmentName }}</td>
                             <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
@@ -106,7 +106,7 @@
                                 </p>
                             </td>
                             <td>{{ item.address }}</td>
-                            <td>{{ item.departmentId }}</td>
+                            <td>{{ item.departmentName }}</td>
                             <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
@@ -165,9 +165,7 @@
                         <li v-for="item in totalPaginate" :key="item">
                             <span v-on:click.prevent="onCurrent(item)"
                                 v-bind:class="{ isActive: (item === current), 'text-dark': isActive == false }"
-                                class="btn-paginate pagination-link go-to has-text-orange" aria-label="Goto page 1">{{
-        item
-}}</span>
+                                class="btn-paginate pagination-link go-to has-text-orange" aria-label="Goto page 1">{{item}}</span>
                         </li>
                         <li>
                             <a class="btn-paginate" @click="next"> Next </a>

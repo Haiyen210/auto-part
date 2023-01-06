@@ -349,6 +349,8 @@ export default {
         },
         onDelete(item) {
             if (confirm("Are you sure you want to delete " + item.code)) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 CategoryProductService.temporaryDelete(item)
                     .then(response => {
                         console.log(response);
@@ -357,6 +359,9 @@ export default {
                     .catch(function (error) {
                         console.log(error)
                     })
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         }
     }

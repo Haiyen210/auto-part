@@ -135,7 +135,7 @@ export default {
                     status: false
                 }
 
-            }else if (this.categorys.code.length >= 5 ) {
+            } else if (this.categorys.code.length >= 5) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -210,20 +210,25 @@ export default {
                     status: false
                 }
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true  && this.descriptionSuccess.status == true) {
-            CategoryProductService.update(this.categorys)
-                .then((res) => {
-                    console.log(res);
-                   
-                })
-                .catch((error) => {
-                    // error.response.status Check status code
-                    console.log(error);
-                })
-                .finally(() => {
-                    //Perform action in always
-                });
-            this.$emit("ShowEditData", this.categorys);
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.descriptionSuccess.status == true) {
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
+                    CategoryProductService.update(this.categorys)
+                        .then((res) => {
+                            console.log(res);
+
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowEditData", this.categorys);
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
     }
