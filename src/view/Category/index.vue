@@ -1,6 +1,4 @@
 <template>
-    <div class="main-container" id="container">
-
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
             <div class="layout-px-spacing">
@@ -10,9 +8,9 @@
 
                         <div class="statbox widget box box-shadow"
                             v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center">
-                                    <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd">Add<svg
+                            <div class="row"  style="margin-top: 26px;">
+                                <div class="col-12 col-sm-5 d-flex justify-content-sm-start justify-content-center" >
+                                    <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd" style="margin-left: 24px;">Add New<svg
                                             xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                             <path
@@ -20,7 +18,7 @@
                                         </svg></a>
                                     <a style="margin-left: 5%;" type="submit" class="btn btn-success mt-3"
                                         v-on:click.prevent="onTrash">Trash<svg viewBox="-61 0 512 512"
-                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" >
+                                            xmlns="http://www.w3.org/2000/svg" width="16" height="16">
                                             <path
                                                 d="m255 0h-120c-24.8125 0-45 20.1875-45 45v15h-60c-16.570312 0-30 13.429688-30 30v30c0 16.566406 13.429688 30 30 30h92.566406c25.570313 0 36.390625-19.378906 44.25-25.605469 2.796875-2.796875 6.664063-4.394531 10.605469-4.394531h182.578125c16.570312 0 30-13.433594 30-30 0-16.570312-13.429688-30-30-30h-60v-15c0-24.8125-20.1875-45-45-45zm15 60h-150v-15c0-8.277344 6.722656-15 15-15h120c8.277344 0 15 6.722656 15 15zm0 0" />
                                             <path
@@ -30,7 +28,7 @@
                                         </svg></a>
                                 </div>
                                 <div
-                                    class="col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3">
+                                    class="col-12 col-sm-5 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3" style="margin-left: 191px;">
                                     <div id="range-search_filter" class="dataTables_filter"><label><svg
                                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -179,7 +177,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 <style>
 .pagination-list {

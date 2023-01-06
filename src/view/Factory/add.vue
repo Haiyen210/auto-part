@@ -50,7 +50,7 @@ export default {
         return {
             message: "",
             currentImage: undefined,
-            // factory: null,
+            a: null,
             url: null,
             ID: null,
             factory: {
@@ -78,22 +78,51 @@ export default {
         }
 
     },
+    mounted(){
+        FactoryService.getAll().then((res)=>{
+            this.a = res.data
+        })
+    },
     methods: {
         onSubmitForm() {
+            var codeSame;
+            for (let i = 0; i < this.a.length; i++) {
+                const element = this.a[i];
+                if(this.factory.code == element.code){
+                    codeSame = element.code;
+                    break;
+                }
+            }
             if (this.factory.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true
                 }
-
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.factory.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
 
-
-            } else if (this.factory.code.length >= 5) {
+            } else if(this.factory.code == codeSame)
+            {
+                this.codeError = {
+                    text: "Code already exists !",
+                    status: true
+                }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            }else if (this.factory.code.length >= 5 || this.factory.code == codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -114,13 +143,20 @@ export default {
                     text: "Name cannot be empty!",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.factory.name.length < 6 || this.factory.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true
                 }
-
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.factory.name.length > 6 || this.factory.name.length < 50) {
                 this.nameSuccess = {
@@ -145,15 +181,6 @@ export default {
                         this.ID = res.data.id;
                         this.factory.id = this.ID;
                         this.factory.status = true;
-                        
-                        console.log(this.factory);
-                        // createToast({
-                        //     title: 'Success',
-                        //     description: 'Thêm mới tài khoản Success',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
                         this.$emit("ShowData", this.factory);
                     })
                     .catch((error) => {

@@ -75,7 +75,6 @@ export default {
             factorys: this.factory,
             url: null,
             ishowImage: false,
-            // factory: null,
             message: "",
             codeError: {
                 text: "",
@@ -97,23 +96,30 @@ export default {
 
 
     },
-    methods: {
 
-        onSubmitEditForm() {
-            if (this.factory.code.length == 0) {
+    methods: {
+        onSubmitForm() {
+
+            if (this.factorys.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true
                 }
-
-            } else if (this.factory.code.length < 5) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.factorys.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
 
-
-            } else if (this.factory.code.length >= 5) {
+            }else if (this.factorys.code.length >= 5 || this.factorys.code == codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -129,19 +135,27 @@ export default {
                 }
             }
 
-            if (this.factory.name.length == 0) {
+            if (this.factorys.name.length == 0) {
                 this.nameError = {
                     text: "Name cannot be empty!",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
-            } else if (this.factory.name.length < 6 || this.factory.name.length > 50) {
+            } else if (this.factorys.name.length < 6 || this.factorys.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
-            } else if (this.factory.name.length > 6 || this.factory.name.length < 50) {
+            } else if (this.factorys.name.length > 6 || this.factorys.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
                     status: true
@@ -160,13 +174,7 @@ export default {
             FactoryService.update(this.factorys)
                 .then((res) => {
                     console.log(res);
-                    // createToast({
-                    //     title: 'Thành công',
-                    //     description: 'Sửa tài khoản thành công',
-                    //     type: 'success',
-                    //     timeout: 5000,
-
-                    // })    
+              
                 })
                 .catch((error) => {
                     // error.response.status Check status code

@@ -255,16 +255,22 @@ export default {
         onSubmitEditForm() {
             if (this.accounts.code.length == 0) {
                 this.codeError = {
-                    text: "Code cannot be empty",
+                    text: "Account name cannot be empty",
                     status: true
                 }
-
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.accounts.code.length < 5) {
                 this.codeError = {
-                    text: "Code must contain 5 characters",
+                    text: "Account name  must contain 5 characters",
                     status: true
                 }
-
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.accounts.code.length >= 5) {
                 this.codeSuccess = {
@@ -287,14 +293,20 @@ export default {
                     text: "FullName cannot be empty!",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.accounts.name.length < 6 || this.accounts.name.length > 50) {
                 this.nameError = {
                     text: "FullName must be between 6 and 50 characters",
                     status: true
                 }
-
-
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.accounts.name.length > 6 || this.accounts.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
@@ -315,9 +327,17 @@ export default {
             if (this.accounts.email.length == 0) {
                 this.emailError.text = "Email cannot be empty!",
                     this.emailError.status = true
+                this.emailSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (!regex.test(this.accounts.email)) {
                 this.emailError.text = "Email is not in the correct format !",
                     this.emailError.status = true
+                this.emailSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (regex.test(this.accounts.email)) {
                 this.emailSuccess.text = "Success!!";
                 this.emailSuccess.status = true;
@@ -332,11 +352,18 @@ export default {
                     text: "Phone cannot be empty",
                     status: true
                 }
-
+                this.phoneSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.accounts.phone.length != 10) {
                 this.phoneError = {
                     text: "Phone must contain 10 characters ",
                     status: true
+                }
+                this.phoneSuccess = {
+                    text: "",
+                    status: false
                 }
             } else if (this.accounts.phone.length < 11 && this.accounts.phone.length > 9) {
                 this.phoneSuccess = {
@@ -358,11 +385,19 @@ export default {
                     text: "Password cannot be empty",
                     status: true
                 }
+                this.passwordSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.accounts.password.length < 6) {
                 this.passwordError = {
                     text: "Password must contain at least 6 characters ",
                     status: true
+                }
+                this.passwordSuccess = {
+                    text: "",
+                    status: false
                 }
             } else if (this.accounts.password.length >= 6) {
                 this.passwordSuccess = {
@@ -380,20 +415,26 @@ export default {
                 }
             }
 
-            if (this.accounts.address.length == 0) {
+            if (this.account.address.length == 0) {
                 this.addressError = {
                     text: "Address cannot be empty",
                     status: true
                 }
-
-            } else if (this.accounts.address.length < 6 || this.accounts.address.length > 50) {
+                this.addressSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.account.address.length < 6 || this.account.address.length > 50) {
                 this.addressError = {
                     text: "Address must be between 6 and 50 characters",
                     status: true
                 }
+                this.addressSuccess = {
+                    text: "",
+                    status: false
+                }
 
-
-            } else if (this.accounts.address.length > 6 || this.accounts.address.length < 50) {
+            } else if (this.account.address.length > 6 || this.account.address.length < 50) {
                 this.addressSuccess = {
                     text: "Success!",
                     status: true
@@ -408,31 +449,11 @@ export default {
                     status: false
                 }
             }
-            if (this.accounts.role.length == 0) {
-                this.roleError = {
-                    text: "Role cannot be empty!",
-                    status: true
-                }
-
-            } else if (this.accounts.role.length > 0) {
-                this.roleSuccess = {
-                    text: "Success!",
-                    status: true
-                }
-                this.roleError = {
-                    text: "",
-                    status: false
-                }
-            } else {
-                this.roleError = {
-                    text: "",
-                    status: false
-                }
-            }
+           
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
             AccountService.update(this.accounts)
                 .then((res) => {
-                    console.log(res);
+                    this.account.departmentName = res.data.departmentName     
                 })
                 .catch((error) => {
                     // error.response.status Check status code

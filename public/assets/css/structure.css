@@ -144,9 +144,10 @@ code {
     box-shadow: 0 0 40px 0 rgb(94 92 154 / 6%);
 }
 
-.layout-top-spacing {
+
+/* .layout-top-spacing {
     margin-top: 20px;
-}
+} */
 
 .layout-spacing {
     padding-bottom: 40px;

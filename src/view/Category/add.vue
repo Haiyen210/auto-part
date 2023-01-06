@@ -60,7 +60,7 @@ export default {
         return {
             message: "",
             currentImage: undefined,
-            // category: null,
+           a:null,
             url: null,
             ID: null,
             category: {
@@ -97,22 +97,51 @@ export default {
         }
 
     },
+    mounted(){
+        CategoryProductService.getAll().then((res)=>{
+            this.a = res.data
+        })
+    },
     methods: {
         onSubmitForm() {
+            var codeSame;
+            for (let i = 0; i < this.a.length; i++) {
+                const element = this.a[i];
+                if(this.category.code == element.code){
+                    codeSame = element.code;
+                    break;
+                }
+            }
             if (this.category.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true
                 }
-
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.category.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
 
-
-            } else if (this.category.code.length >= 5) {
+            } else if(this.category.code == codeSame)
+            {
+                this.codeError = {
+                    text: "Code already exists !",
+                    status: true
+                }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            }else if (this.category.code.length >= 5 || this.category.code != codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -133,13 +162,20 @@ export default {
                     text: "Name cannot be empty!",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.category.name.length < 6 || this.category.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true
                 }
-
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.category.name.length > 6 || this.category.name.length < 50) {
                 this.nameSuccess = {
@@ -161,7 +197,10 @@ export default {
                     text: "Description cannot be empty",
                     status: true
                 }
-
+                this.descriptionSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.category.description.length > 0) {
                 this.descriptionSuccess = {
                     text: "Success!",
@@ -186,13 +225,6 @@ export default {
                         this.category.status = true;
                         
                         console.log(this.category);
-                        // createToast({
-                        //     title: 'Success',
-                        //     description: 'Thêm mới tài khoản Success',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
                         this.$emit("ShowData", this.category);
                     })
                     .catch((error) => {

@@ -1,6 +1,6 @@
 <template>
   <Login v-if="checkLogin == true"></Login>
-  <div v-if="checkLogin == false">
+  <div class="main-container" id="container" v-if="checkLogin == false">
      <Header></Header>
      <SileBar />
      <router-view></router-view>

@@ -84,7 +84,6 @@ export default {
             categorys: this.category,
             url: null,
             ishowImage: false,
-            // category: null,
             message: "",
             codeError: {
                 text: "",
@@ -114,23 +113,29 @@ export default {
 
 
     },
-    methods: {
 
-        onSubmitEditForm() {
-            if (this.category.code.length == 0) {
+    methods: {
+        onSubmitForm() {
+            if (this.categorys.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true
                 }
-
-            } else if (this.category.code.length < 5) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.categorys.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
 
-
-            } else if (this.category.code.length >= 5) {
+            }else if (this.categorys.code.length >= 5 ) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -146,19 +151,27 @@ export default {
                 }
             }
 
-            if (this.category.name.length == 0) {
+            if (this.categorys.name.length == 0) {
                 this.nameError = {
                     text: "Name cannot be empty!",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
-            } else if (this.category.name.length < 6 || this.category.name.length > 50) {
+            } else if (this.categorys.name.length < 6 || this.categorys.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true
                 }
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
 
-            } else if (this.category.name.length > 6 || this.category.name.length < 50) {
+            } else if (this.categorys.name.length > 6 || this.categorys.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
                     status: true
@@ -173,13 +186,16 @@ export default {
                     status: false
                 }
             }
-            if (this.category.description.length == 0) {
+            if (this.categorys.description.length == 0) {
                 this.descriptionError = {
                     text: "Description cannot be empty",
                     status: true
                 }
-
-            } else if (this.category.description.length > 0) {
+                this.descriptionSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.categorys.description.length > 0) {
                 this.descriptionSuccess = {
                     text: "Success!",
                     status: true
@@ -198,13 +214,7 @@ export default {
             CategoryProductService.update(this.categorys)
                 .then((res) => {
                     console.log(res);
-                    // createToast({
-                    //     title: 'Thành công',
-                    //     description: 'Sửa tài khoản thành công',
-                    //     type: 'success',
-                    //     timeout: 5000,
-
-                    // })    
+                   
                 })
                 .catch((error) => {
                     // error.response.status Check status code

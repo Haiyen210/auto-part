@@ -90,6 +90,7 @@ export default {
             currentImage: undefined,
             url: null,
             ID: null,
+            a: null,
             banner: {
                 id: null,
                 code: "",
@@ -124,25 +125,50 @@ export default {
             },
         };
     }, 
+    mounted(){
+        BannerService.getAll().then((res)=>{
+            this.a = res.data
+        })
+    },
     methods: {
-          selectImage() {
-            this.currentImage = this.$refs.file.files.item(0);
-            this.url = URL.createObjectURL(this.currentImage);
-            this.banner.image = this.$refs.file.files.item(0).name;
-        },
         onSubmitForm() {
-            
+            var codeSame;
+            for (let i = 0; i < this.a.length; i++) {
+                const element = this.a[i];
+                if(this.banner.code == element.code){
+                    codeSame = element.code;
+                    break;
+                }
+            }
             if (this.banner.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true,
                 };
-            } else if (this.banner.code.length < 4 || this.banner.code.length > 6) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.banner.code.length < 5) {
                 this.codeError = {
                     text: "Code must be between 4 and 6 characters",
                     status: true,
                 };
-            } else if (this.banner.code.length > 4 || this.banner.code.length < 6) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            }  else if(this.banner.code == codeSame)
+            {
+                this.codeError = {
+                    text: "Code already exists !",
+                    status: true
+                }
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            }else if (this.banner.code.length < 5 || this.banner.code != codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true,
@@ -163,11 +189,19 @@ export default {
                     text: "Name cannot be empty",
                     status: true,
                 };
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banner.name.length < 6 || this.banner.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true,
                 };
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banner.name.length > 6 || this.banner.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
@@ -188,7 +222,10 @@ export default {
                     text: "Description cannot be empty",
                     status: true,
                 };
-            
+                this.descriptionSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banner.description.length > 6 || this.banner.description.length < 50) {
                 this.descriptionSuccess = {
                     text: "Success!",
@@ -221,13 +258,6 @@ export default {
                         this.ID = res.data.id;
                         this.banner.id = this.ID;
                         console.log(res.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Thêm mới banner thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
                     })
                     .catch((error) => {
                         // error.response.status Check status code
@@ -239,7 +269,11 @@ export default {
                 this.$emit("ShowData", this.banner);
             }
         },
-      
+        selectImage() {
+            this.currentImage = this.$refs.file.files.item(0);
+            this.url = URL.createObjectURL(this.currentImage);
+            this.banner.image = this.$refs.file.files.item(0).name;
+        },
     },
 };
 </script>

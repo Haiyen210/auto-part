@@ -139,6 +139,7 @@ export default {
             },
         };
     },
+
     methods: {
         selectImage() {
             this.currentImage = this.$refs.file.files.item(0);
@@ -147,17 +148,26 @@ export default {
             this.ishowImage = true;
         },
         onSubmitEditForm() {
+         
             if (this.banners.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true,
                 };
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banners.code.length < 4 || this.banners.code.length > 6) {
                 this.codeError = {
                     text: "Code must be between 4 and 6 characters",
                     status: true,
                 };
-            } else if (this.banners.code.length > 4 || this.banners.code.length < 6) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            }  else if (this.banners.code.length > 4 || this.banners.code.length < 6 ) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true,
@@ -178,11 +188,19 @@ export default {
                     text: "Name cannot be empty",
                     status: true,
                 };
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banners.name.length < 6 || this.banners.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true,
                 };
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banners.name.length > 6 || this.banners.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
@@ -203,7 +221,10 @@ export default {
                     text: "Description cannot be empty",
                     status: true,
                 };
-            
+                this.descriptionSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.banners.description.length > 6 || this.banners.description.length < 50) {
                 this.descriptionSuccess = {
                     text: "Success!",
@@ -234,13 +255,7 @@ export default {
                     //Perform Success Action
                     this.banners = res.data;
                     res.data.files;
-                    //   createToast({
-                    //         title: 'Thành công',
-                    //         description: 'Sửa banner thành công',
-                    //         type: 'success',
-                    //         timeout: 5000,
-
-                    //     })
+                
                 })
                 .catch((error) => {
                     // error.response.status Check status code
