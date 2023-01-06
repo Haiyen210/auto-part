@@ -2,7 +2,7 @@
 
 
     <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
-        <div class="row">
+        <div class="row" style="margin-top: 26px;">
             <div class="col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"

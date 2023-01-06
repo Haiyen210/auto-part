@@ -12,7 +12,8 @@
                 <div class="form-group row mb-4">
                     <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="code" placeholder="Enter Department Code" v-model="department.code"
+                        <input type="text" class="form-control" id="code" placeholder="Enter Department Code"
+                            v-model="department.code"
                             :class="{ error: codeError.status, success: codeSuccess.status }" />
                         <p class="text-error" v-if="codeError.status">
                             {{ codeError.text }}
@@ -25,7 +26,8 @@
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Name</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="name" placeholder="Enter Department Name" v-model="department.name"
+                        <input type="text" class="form-control" id="name" placeholder="Enter Department Name"
+                            v-model="department.name"
                             :class="{ error: nameError.status, success: nameSuccess.status }" />
                         <p class="text-error" v-if="nameError.status">
                             {{ nameError.text }}
@@ -67,7 +69,7 @@ import DepartmentService from "../../services/DepartmentService";
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
-    
+
     props: ["departments"],
     name: "add-department",
     data() {
@@ -77,6 +79,7 @@ export default {
             currentImage: undefined,
             url: null,
             ID: null,
+            list_departments: null,
             department: {
                 id: null,
                 code: "",
@@ -108,34 +111,58 @@ export default {
                 status: false,
             },
         };
-    }, 
+    },
+    mounted() {
+        DepartmentService.getAll().then((res) => {
+            this.list_departments = res.data;
+        });
+    },
     methods: {
         onSubmitForm() {
-            
             if (this.department.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
                     status: true,
                 };
-            } else if ( this.department.code.length > 6) {
-                this.codeError = {
-                    text: "Code must be longest 6 characters",
-                    status: true,
-                };
-            } else if (this.department.code.length > 0 || this.department.code.length < 6) {
                 this.codeSuccess = {
-                    text: "Success!",
+                    text: "",
+                    status: false,
+                };
+            } else if (this.department.code.length > 6) {
+                this.codeError = {
+                    text: "Code must be least 6 characters",
                     status: true,
                 };
-                 this.codeError = {
+                this.codeSuccess = {
                     text: "",
                     status: false,
                 };
             } else {
-                this.codeError = {
-                    text: "",
-                    status: false,
-                };
+                var check_exist = true;
+                for (var i = 0; i < this.list_departments.length; i++) {
+                    if (this.department.code === this.list_departments[i].code) {
+                        check_exist = false;
+                    }
+                }
+                if (check_exist == false) {
+                    this.codeError = {
+                        text: "Code is exist ! Please change new !",
+                        status: true
+                    }
+                    this.codeSuccess = {
+                        text: "",
+                        status: false,
+                    };
+                } else if (this.department.code.length > 0 || this.department.code.length < 6) {
+                    this.codeSuccess = {
+                        text: "Success!",
+                        status: true,
+                    };
+                    this.codeError = {
+                        text: "",
+                        status: false,
+                    };
+                }
             }
 
             if (this.department.name.length == 0) {
@@ -143,28 +170,48 @@ export default {
                     text: "Name cannot be empty",
                     status: true,
                 };
+                this.nameSuccess = {
+                    text: "",
+                    status: false,
+                };
             } else if (this.department.name.length < 6 || this.department.name.length > 50) {
                 this.nameError = {
                     text: "Name must be between 6 and 50 characters",
                     status: true,
                 };
-            } else if (this.department.name.length > 6 || this.department.name.length < 50) {
                 this.nameSuccess = {
-                    text: "Success!",
-                    status: true,
-                };
-                 this.nameError = {
                     text: "",
                     status: false,
                 };
-            } else {
-                this.nameError = {
-                    text: "",
-                    status: false,
-                };
+            }else {
+                var check_exist_name = true;
+                for (var j = 0; j < this.list_departments.length; j++) {
+                    if (this.department.name === this.list_departments[j].name) {
+                        check_exist_name = false;
+                    }
+                }
+                if (check_exist_name == false) {
+                    this.nameError = {
+                        text: "Name is exist ! Please change new !",
+                        status: true
+                    }
+                    this.nameSuccess = {
+                        text: "",
+                        status: false,
+                    };
+                } else if (this.department.name.length > 0 || this.department.name.length < 6) {
+                    this.nameSuccess = {
+                        text: "Success!",
+                        status: true,
+                    };
+                    this.nameError = {
+                        text: "",
+                        status: false,
+                    };
+                }
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true )  {
-            
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
+
                 DepartmentService.create(this.department)
                     .then((res) => {
                         //Perform Success Action
@@ -182,7 +229,7 @@ export default {
                 this.$emit("ShowData", this.department);
             }
         },
-      
+
     },
 };
 </script>

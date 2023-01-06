@@ -24,21 +24,15 @@
                         <textarea class="form-control mb-4" rows="3" id="name" v-model="warehouses.name"></textarea>
                     </div>
                 </div>
+                
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1"
-                        class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Quantity</label>
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Factory</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="number" class="form-control" id="quantity" placeholder="" v-model="warehouses.quantity" />
-                    </div>
-
-                </div>
-                <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">FactoryID</label>
-                    <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select class="form-control" name="" id="factoryID" v-model="warehouses.factoryID">
-                            <option value="">Mời Chọn</option>
+                        <select class="form-control basic" name="" id="factoryID" v-model="warehouses.factoryID">
+                            <option value="" >Choose</option>
+                            <option v-for="item in factoryes" :key="item.id" :selected="warehouses.factoryID === item.id" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <!-- <input type="text" class="form-control" id="images" placeholder="" v-model="product.images"> -->
+                
                     </div>
                 </div>
                 
@@ -47,14 +41,14 @@
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Status</label>
                         <div class="col-xl-10 col-lg-9 col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="warehouses.status" :value="true"
-                                    :checked="warehouses.status === true" id="status" style="width: 16px;height: 16px;" />
+                                <input class="form-check-input" type="radio" v-model="warehouses.status" :value="1"
+                                    :checked="warehouses.status === 1" id="status" style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckDefault"> Action
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="warehouses.status" :value="false"
-                                    :checked="warehouses.status === false" id="status"
+                                <input class="form-check-input" type="radio" v-model="warehouses.status" :value="0"
+                                    :checked="warehouses.status === 0" id="status"
                                     style="width: 16px;height: 16px;" />
                                 <label class="form-check-label" for="flexCheckChecked"> No Action </label>
                             </div>
@@ -71,6 +65,7 @@
     </div>
 </template>
 <script>
+import FactoryService from '@/services/FactoryService';
 import WareHouseService from '@/services/WareHouseService';
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
@@ -82,6 +77,7 @@ export default {
         return {
             warehouses: this.warehouse,
             url: null,
+            factoryes : null,
             ishowImage: false,
             category: null,
             message: "",
@@ -89,6 +85,20 @@ export default {
 
 
     },
+    mounted(){
+        FactoryService.getAll()
+            .then((res) => {
+                this.factoryes = res.data;
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
+            .finally(()=>{
+
+            })
+            
+            },
     methods: {
 
         onSubmitEditForm() {

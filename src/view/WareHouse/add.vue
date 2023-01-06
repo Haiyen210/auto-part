@@ -31,50 +31,18 @@
                         </p>
                     </div>
                 </div>
+                
                 <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Quantity</label>
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Factory</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="quantity" placeholder="" v-model="warehouse.quantity"
-                            :class="{ error: quantityError.status, success: quantitySuccess.status }">
-                        <p class="text-error" v-if="quantityError.status">{{ quantityError.text }}</p>
-                        <p class="success-text" v-if="quantitySuccess.status">{{ quantitySuccess.text }}
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">FactoryID</label>
-                    <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select name="" id="categoryId" v-model="warehouse.factoryID"
-                            :class="{ error: factoryIDError.status, success: factoryIDSuccess.status }">
-                            <option value="" >Mời chọn</option>
+                        <select class="form-control basic" name="" id="factoryID" v-model="warehouse.factoryID">
+                            <option value="" >Choose</option>
+                            <option v-for="item in factoryes" :key="item.id" :selected="warehouse.factoryID === item.id" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <!-- <input type="text" class="form-control" id="address" placeholder="" v-model="account.address"
-                            :class="{ error: addressError.status, success: addressSuccess.status }"> -->
-                        <p class="text-error" v-if="factoryIDError.status">{{ factoryIDError.text }}</p>
-                        <p class="success-text" v-if="factoryIDSuccess.status">{{ factoryIDSuccess.text }}
-                        </p>
+                
                     </div>
                 </div>
                 
-                <fieldset class="form-group mb-4">
-                    <div class="row">
-                        <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Status</label>
-                        <div class="col-xl-10 col-lg-9 col-sm-10">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="warehouse.status" :value="true"
-                                    :checked="warehouse.status === true" id="status" style="width: 16px;height: 16px;" />
-                                <label class="form-check-label" for="flexCheckDefault"> còm
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" v-model="warehouse.status" :value="false"
-                                    :checked="warehouse.status === false" id="status"
-                                    style="width: 16px;height: 16px;" />
-                                <label class="form-check-label" for="flexCheckChecked"> hết </label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary mt-3">Save</button>
@@ -87,6 +55,7 @@
 </template>
 <script>
 import WareHouseService from '@/services/WareHouseService';
+import FactoryService from '@/services/FactoryService';
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
@@ -95,15 +64,16 @@ export default {
             message: "",
             currentImage: undefined,
             category: null,
+            factoryes: null,
             url: null,
             ID: null,
             warehouse: {
                 id: null,
                 code: "",
                 name: "",
-                quantity: "",
-                status: 1,
-                factorys: ""
+                factoryID: "",
+                status: 0,
+                factorys: "",
                 
             },
             codeError: {
@@ -122,14 +92,6 @@ export default {
                 text: "",
                 status: false,
             },
-            quantityError: {
-                text: "",
-                status: false,
-            },
-            quantitySuccess: {
-                text: "",
-                status: false,
-            },
             factoryIDError: {
                 text: "",
                 status: false,
@@ -141,18 +103,31 @@ export default {
         }
 
     },
+    mounted(){
+        FactoryService.getAll()
+            .then((res) => {
+                this.factoryes = res.data;
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
+            .finally(()=>{
+
+            })
+        },
     methods: {
         onSubmitForm() {
             if (this.warehouse.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
-                    status: true
+                    status: false
                 }
 
             } else if (this.warehouse.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
-                    status: true
+                    status: false
                 }
 
 
@@ -166,22 +141,22 @@ export default {
                     status: false
                 }
             } else {
-                this.codeError = {
+                this.codeSuccess = {
                     text: "",
-                    status: false
+                    status: true
                 }
             }
 
             if (this.warehouse.name.length == 0) {
                 this.nameError = {
                     text: "FullName cannot be empty!",
-                    status: true
+                    status: false
                 }
 
             } else if (this.warehouse.name.length < 6 || this.warehouse.name.length > 50) {
                 this.nameError = {
                     text: "FullName must be between 6 and 50 characters",
-                    status: true
+                    status: false
                 }
 
 
@@ -195,39 +170,20 @@ export default {
                     status: false
                 }
             } else {
-                this.nameError = {
+                this.nameSuccess = {
                     text: "",
-                    status: false
+                    status: true
                 }
             }
 
-            
-            if (this.warehouse.quantity.length == 0) {
-                this.quantityError = {
-                    text: "Phone cannot be empty",
-                    status: true
-                }
-
-            } else if (this.warehouse.quantity.length > 0) {
-                this.quantitySuccess = {
-                    text: "Quantity must contain 0  ",
-                    status: true
-                }
-            
-            } else {
-                this.quantityError = {
-                    text: "",
+            if (this.warehouse.factoryID.length == 0) {
+                this.factorysError = {
+                    text: "factory cannot be empty",
                     status: false
                 }
-            }
-            if (this.warehouse.factorys.length == 0) {
-                this.factoryIDError = {
-                    text: "Password cannot be empty",
-                    status: true
-                }
 
             
-            } else if (this.warehouse.factorys.length > 0) {
+            } else if (this.warehouse.factoryID.length > 0) {
                 this.factoryIDSuccess = {
                     text: "Success!",
                     status: true
@@ -236,23 +192,25 @@ export default {
                     text: "",
                     status: false
                 }
+                
             } else {
-                this.factoryIDError = {
+                this.factoryIDSuccess = {
                     text: "",
-                    status: false
+                    status: true
                 }
             }
 
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.quantitySuccess.status == true && this.factoryIDSuccess.status == true ) {
+            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.factoryIDSuccess.status == true ) {
                 WareHouseService.create(this.warehouse)
                     .then((res) => {
                         //Perform Success Action
                         this.ID = res.data.id;
                         this.warehouse.id = this.ID;
                         this.warehouse.status = true;
-                        
+                        this.warehouse.createdDate == Date(); 
+                        this.warehouse.modifiedDate == Date(); 
                         console.log(this.warehouse);
-                       
+                      
                         this.$emit("ShowData", this.warehouse);
                     })
                     .catch((error) => {

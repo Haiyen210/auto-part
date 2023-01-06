@@ -49,22 +49,33 @@
 
                 </div>
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Category Name</label>
+                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Quantity</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select name="" id="categoryId" v-model="products.category"
-                          >
-                          <option v-for="item in categorys" :key="item.id" :selected="product.categoryId === item.id" v-bind:value="item">{{ item.name }}</option>
-                        </select>
+                        <input type="text" class="form-control" id="salePrice" placeholder=""
+                            v-model="products.quantity" />
                     </div>
 
                 </div>
                 <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Images</label>
-                    <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="images" placeholder="" v-model="products.images">
+                    <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Image</label>
+                    <div class="col-4">
+                        <p class="btn btn-success btn-sm" @click="$refs.file.click()">
+                            Choose file
+                        </p>
+                    </div>
+                    <div class="col-8">
+                        <label class="btn btn-default p-0">
+                            <input type="file" accept="image/*" name="file" ref="file" @change="selectImage"
+                                :hidden="true" />
+                        </label>
+                    </div>
+                    <div class="col-xl-10 col-lg-9 col-sm-10">
+                        <img :src="'http://localhost:54195/images/' + products.images"
+                            style="width: 600px; height: 500px; margin-left: 20%" v-if="ishowImage == false" />
+                        <img v-bind:src="url" style="width: 600px; height: 500px; margin-left: 20%"
+                            v-if="ishowImage == true" />
                     </div>
                 </div>
-                
                 <fieldset class="form-group mb-4">
                     <div class="row">
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Status</label>
@@ -84,15 +95,25 @@
                         </div>
                     </div>
                 </fieldset>
-
                 <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">WareHouseID</label>
-                    <select name="" id="warehouseId" v-model="products.warehouse">
-                            <option value="" >Choose</option>
-                            <option v-for="item in warehouses" :key="item.id" :selected="product.warehouseId === item.id" v-bind:value="item">{{ item.name }}</option>
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Category</label>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <select class="form-control basic" name="" id="categoryId" v-model="products.categoryId">
+                          <option value="" >Choose</option>
+                          <option v-for="item in categorys" :key="item.id" :selected="products.categoryId === item.id" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
+                    </div>
+                </div> 
+                <div class="form-group row mb-4">
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">WareHouse</label>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <select class="form-control basic" name="" id="wareHouseID" v-model="products.wareHouseID">
+                            <option value="" >Choose</option>
+                            <option v-for="item in warehouses" :key="item.id" :selected="products.wareHouseID === item.id" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                
+                    </div>
                 </div>
-
                 
                 <div class="form-group row">
                     <div class="col-sm-10">
@@ -106,7 +127,8 @@
 <script>
 import ProductService from '@/services/ProductService';
 import WareHouseService from '@/services/WareHouseService';
-import CategoryService from '@/services/CategoryService';
+import CategoryProductService from '@/services/CategoryProductService';
+import UploadService from "../../services/UploadService";
 // import 'mosha-vue-toastify/dist/style.css';
 // import { createToast } from 'mosha-vue-toastify';
 export default {
@@ -116,11 +138,16 @@ export default {
 
         return {
             products: this.product,
+            categoryName : null,
+            warehouseName: null,
             url: null,
+            
             ishowImage: false,
             categorys: null,
             warehouses: null,
             message: "",
+            old: "localhost:54195/images/" + this.product.images,
+            currentImage: undefined,
         }
 
     },
@@ -136,7 +163,7 @@ export default {
             .finally(()=>{
 
             })
-            CategoryService.getAll()
+            CategoryProductService.getAll()
             .then((res) => {
                 this.categorys = res.data;
             })
@@ -150,14 +177,28 @@ export default {
             },
             
     methods: {
-        
+        selectImage() {
+            this.currentImage = this.$refs.file.files.item(0);
+            this.url = URL.createObjectURL(this.currentImage);
+            this.products.images = this.$refs.file.files.item(0).name;
+            this.ishowImage = true;
+        },
         onSubmitEditForm() {
-            
+            UploadService.upload(this.currentImage)
+                .then((response) => {
+                    console.log();
+                    this.message = response.data.message;
+                })
+                .catch((err) => {
+                    this.message = "Unable to load image  ! " + err;
+                    this.currentImage = undefined;
+                });
             ProductService.update(this.products)
-                .then((res) => {
-                    
+                .then((res) => {     
                     console.log(res);
-
+                    this.products.categoryName = res.data.categoryName;
+                    this.products.warehouseName = res.data.warehouseName;
+                       
                 })
                 .catch((error) => {
                     // error.response.status Check status code

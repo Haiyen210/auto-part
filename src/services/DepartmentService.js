@@ -10,7 +10,7 @@ class DepartmentService {
         return http.post("/Departments", data);
     }
     update(data) {
-        return http.post(`/Departments/${data.id}`, data);
+        return http.put(`/Departments/${data.id}`, data);
     }
     delete(id) {
         return http.delete(`/Departments/${id}`);

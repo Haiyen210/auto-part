@@ -6,6 +6,8 @@ import WareHouse from "./view/WareHouse/index";
 import Banner from "./view/Banner/index";
 import Department from "./view/Department/index";
 import AccountUser from "./view/AccountUser/index";
+import Product from "./view/Product/index";
+import Login from "./view/login";
 import Home from "./view/home";
 const routes = [{
         path: "/",
@@ -53,6 +55,16 @@ const routes = [{
         path: "/account_user",
         name: "account_user",
         component: AccountUser,
+    },
+    {
+        path: "/login",
+        name: "login",
+        component: Login,
+    },
+    {
+        path: "/product-manager",
+        name: "product",
+        component: Product,
     },
 
 ];

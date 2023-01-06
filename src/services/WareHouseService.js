@@ -10,7 +10,7 @@ class WareHouseService {
         return http.post("/warehouses", data);
     }
     update(data) {
-        return http.post(`/warehouses/Putwarehouses`, data);
+        return http.post(`/warehouses/Putwarehouse`, data);
     }
     delete(id) {
             return http.delete(`/warehouses/${id}`);

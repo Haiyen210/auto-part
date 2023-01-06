@@ -80,33 +80,6 @@
 
                     </div>
                 </div>
-                <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Department</label>
-                    <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select class="form-control  basic" v-model="account.departmentId" id="departmentId">
-                            <option value=""> Choose Department:</option>
-                            <option v-for="item in department" :key="item.id"
-                                :selected="account.departmentId === item.id" v-bind:value="item.id">{{ item.name }}
-                            </option>
-                        </select>
-
-                    </div>
-                </div>
-                <div class="form-group row mb-4">
-                    <label for="role" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Role</label>
-                    <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <select class="form-control  basic" v-model="account.role" id="role"
-                            :class="{ error: roleError.status, success: roleSuccess.status }">
-                            <option value=""> Choose Role:</option>
-                            <option v-bind:value="0">Admin WareHouse</option>
-                            <option v-bind:value="1">Admin Factory</option>
-                            <option v-bind:value="2">Admin Management</option>
-                        </select>
-                        <p class="text-error" v-if="roleError.status">{{ roleError.text }}</p>
-                        <p class="success-text" v-if="roleSuccess.status">{{ roleSuccess.text }}
-                        </p>
-                    </div>
-                </div>
                 <fieldset class="form-group mb-4">
                     <div class="row">
                         <label class="col-form-label col-xl-2 col-sm-3 col-sm-2 pt-0">Gender</label>
@@ -125,6 +98,12 @@
                         </div>
                     </div>
                 </fieldset>
+                <div class="form-group row mb-4">
+                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Role</label>
+                    <div class="col-xl-6 col-lg-6 col-sm-6">
+                        <input type="text" class="form-control" id="address" placeholder="" v-model="account.role">
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary mt-3">Save</button>
@@ -136,14 +115,14 @@
 
 </template>
 <script>
+import AccountUserService from '@/services/AccountUserService.js';
 import AccountService from '@/services/AccountUserService.js';
-import DepartmentService from '@/services/DepartmentService.js';
 export default {
     data() {
         return {
             message: "",
             currentImage: undefined,
-            department: null,
+            accounts: null,
             url: null,
             ID: null,
             account: {
@@ -155,7 +134,6 @@ export default {
                 password: "",
                 address: "",
                 birthday: "",
-                departmentId: "",
                 role: "",
                 gender: "",
                 status: true
@@ -228,9 +206,9 @@ export default {
 
     },
     mounted() {
-        DepartmentService.getAll()
+        AccountUserService.getAll()
             .then((res) => {
-                this.department = res.data;
+                this.accounts = res.data;
             })
             .catch((error) => {
                 console.log(error);
@@ -247,43 +225,65 @@ export default {
                     text: "Code cannot be empty",
                     status: true
                 }
-
+                this.codeSuccess = {
+                        text: "",
+                        status: false
+                    }
             } else if (this.account.code.length < 5) {
                 this.codeError = {
                     text: "Code must contain 5 characters",
                     status: true
                 }
-
-
-            } else if (this.account.code.length >= 5) {
                 this.codeSuccess = {
-                    text: "Success!",
-                    status: true
-                }
-                this.codeError = {
-                    text: "",
-                    status: false
-                }
+                        text: "",
+                        status: false
+                    }
             } else {
-                this.codeError = {
-                    text: "",
-                    status: false
+                var check_exist_code = true;
+                for (var i = 0; i < this.accounts.length; i++) {
+                    if (this.account.code === this.accounts[i].code) {
+                        check_exist_code = false;
+                    }
+                }
+                if (check_exist_code == false) {
+                    this.codeError = {
+                        text: "Code is exist ! Please change new !",
+                        status: true
+                    }
+                    this.codeSuccess = {
+                        text: "",
+                        status: false
+                    }
+                } else if (this.account.code.length >= 5) {
+                    this.codeSuccess = {
+                        text: "Success!",
+                        status: true
+                    }
+                    this.codeError = {
+                        text: "",
+                        status: false
+                    }
+
                 }
             }
-
             if (this.account.name.length == 0) {
                 this.nameError = {
                     text: "FullName cannot be empty!",
                     status: true
                 }
-
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.name.length < 6 || this.account.name.length > 50) {
                 this.nameError = {
                     text: "FullName must be between 6 and 50 characters",
                     status: true
                 }
-
-
+                this.nameSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.name.length > 6 || this.account.name.length < 50) {
                 this.nameSuccess = {
                     text: "Success!",
@@ -299,14 +299,18 @@ export default {
                     status: false
                 }
             }
-
             const regex = /^\w+([.-]?\w+)*@[a-z]+([.-]?\w+)*(.\w{2,3})+$/;
-            if (this.account.email.length == 0) {
+            if (this.account.email.length == 0 || this.account.email == '') {
                 this.emailError.text = "Email cannot be empty!",
-                    this.emailError.status = true
+                this.emailError.status = true;
+                this.emailSuccess.text = "";
+                this.emailSuccess.status = false;
+
             } else if (!regex.test(this.account.email)) {
                 this.emailError.text = "Email is not in the correct format !",
-                    this.emailError.status = true
+                this.emailError.status = true;
+                this.emailSuccess.text = "";
+                this.emailSuccess.status = false;
             } else if (regex.test(this.account.email)) {
                 this.emailSuccess.text = "Success!!";
                 this.emailSuccess.status = true;
@@ -315,17 +319,31 @@ export default {
                 this.emailError.text = "",
                     this.emailError.status = false
             }
-
+            const regex_phone = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
             if (this.account.phone.length == 0) {
                 this.phoneError = {
                     text: "Phone cannot be empty",
                     status: true
                 }
-
+                this.phoneSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (!regex_phone.test(this.account.phone)) {
+                this.phoneError.text = "Phone is not in the correct format !",
+                this.phoneError.status = true;
+                this.phoneSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.phone.length != 10) {
                 this.phoneError = {
                     text: "Phone must contain 10 characters ",
                     status: true
+                }
+                this.phoneSuccess = {
+                    text: "",
+                    status: false
                 }
             } else if (this.account.phone.length < 11 && this.account.phone.length > 9) {
                 this.phoneSuccess = {
@@ -347,13 +365,20 @@ export default {
                     text: "Password cannot be empty",
                     status: true
                 }
-
-            } else if (this.account.password.length < 6) {
+                this.passwordSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.account.password.length < 8) {
                 this.passwordError = {
-                    text: "Password must contain at least 6 characters ",
+                    text: "Password must contain at least 8 characters ",
                     status: true
                 }
-            } else if (this.account.password.length >= 6) {
+                this.passwordSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.account.password.length >= 8) {
                 this.passwordSuccess = {
                     text: "Success!",
                     status: true
@@ -368,20 +393,24 @@ export default {
                     status: false
                 }
             }
-
             if (this.account.address.length == 0) {
                 this.addressError = {
                     text: "Address cannot be empty",
                     status: true
                 }
-
+                this.addressSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.address.length < 6 || this.account.address.length > 50) {
                 this.addressError = {
                     text: "Address must be between 6 and 50 characters",
                     status: true
                 }
-
-
+                this.addressSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.address.length > 6 || this.account.address.length < 50) {
                 this.addressSuccess = {
                     text: "Success!",
@@ -402,7 +431,10 @@ export default {
                     text: "Role cannot be empty!",
                     status: true
                 }
-
+                this.roleSuccess = {
+                    text: "",
+                    status: false
+                }
             } else if (this.account.role.length > 0) {
                 this.roleSuccess = {
                     text: "Success!",
@@ -418,7 +450,6 @@ export default {
                     status: false
                 }
             }
-
             if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.emailSuccess.status == true && this.phoneSuccess.status == true && this.passwordSuccess.status == true && this.addressSuccess.status == true) {
                 if (this.account.gender.length == 0) {
                     this.account.gender = false;
@@ -451,7 +482,6 @@ export default {
                         //Perform action in always
                     });
             }
-
         },
     }
 
