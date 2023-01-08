@@ -78,10 +78,7 @@
 <script>
 import BannerService from "../../services/BannerService";
 import UploadService from "../../services/UploadService";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
-
     props: ["banners"],
     name: "add-banner",
     data() {
@@ -151,9 +148,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.banner.code.length < 5) {
+            } else if (this.banner.code.length < 4) {
                 this.codeError = {
-                    text: "Code must be between 4 and 6 characters",
+                    text: "Code must be 4 characters",
                     status: true,
                 };
                 this.codeSuccess = {
@@ -169,7 +166,7 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.banner.code.length < 5 || this.banner.code != codeSame) {
+            } else if (this.banner.code.length < 4 || this.banner.code != codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true,
@@ -247,7 +244,7 @@ export default {
                 if (login.role == 2) {
                     UploadService.upload(this.currentImage)
                         .then((response) => {
-                            console.log();
+                            console.log(response);
                             this.message = response.data.message;
                         })
                         .catch((err) => {

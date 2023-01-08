@@ -155,8 +155,6 @@
 <script>
 import AccountService from '@/services/AccountAdminService';
 import DepartmentService from '@/services/DepartmentService';
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     props: ['account'],
 
@@ -264,9 +262,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.accounts.code.length < 5) {
+            } else if (this.accounts.code.length < 4) {
                 this.codeError = {
-                    text: "Account name  must contain 5 characters",
+                    text: "Account name  must contain 4 characters",
                     status: true
                 }
                 this.codeSuccess = {
@@ -274,7 +272,7 @@ export default {
                     status: false
                 }
 
-            } else if (this.accounts.code.length >= 5) {
+            } else if (this.accounts.code.length >= 4) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -458,6 +456,7 @@ export default {
                     AccountService.update(this.accounts)
                         .then((res) => {
                             this.accounts.departmentName = res.data.departmentName
+                            this.$emit("ShowEditData", this.accounts);
                         })
                         .catch((error) => {
                             // error.response.status Check status code
@@ -466,7 +465,7 @@ export default {
                         .finally(() => {
                             //Perform action in always
                         });
-                    this.$emit("ShowEditData", this.accounts);
+
                 } else {
                     alert("You are not authorized to perform this task");
                 }

@@ -3,7 +3,8 @@
 
     <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
         <div class="row" style="margin-top: 26px;">
-            <div class="col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3">
+            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
+                style="margin-left: -23px;">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -31,7 +32,6 @@
                             <th>FullName</th>
                             <th>Gender</th>
                             <th>Address</th>
-                            <th>Department</th>
                             <th>Status</th>
                             <th>Role</th>
                             <th class="text-center">Action</th>
@@ -48,7 +48,6 @@
                                 </p>
                             </td>
                             <td>{{ item.address }}</td>
-                            <td>{{ item.departmentId }}</td>
                             <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
@@ -57,9 +56,8 @@
                             </td>
                             <td>
                                 <p class="">
-                                    <span v-if="item.role == 0">Admin WareHouse</span>
-                                    <span v-if="item.role == 1">Admin Factory</span>
-                                    <span v-if="item.role == 2">Admin Management</span>
+                                    <span v-if="item.role == 0">General agent</span>
+                                    <span v-if="item.role == 1">Agent</span>
                                 </p>
                             </td>
 
@@ -107,7 +105,6 @@
                                 </p>
                             </td>
                             <td>{{ item.address }}</td>
-                            <td>{{ item.departmentId }}</td>
                             <td>
                                 <p class="text-success">
                                     <span v-if="item.status">Action</span>
@@ -116,9 +113,8 @@
                             </td>
                             <td>
                                 <p class="">
-                                    <span v-if="item.role == 0">Admin WareHouse</span>
-                                    <span v-if="item.role == 1">Admin Factory</span>
-                                    <span v-if="item.role == 2">Admin Management</span>
+                                    <span v-if="item.role == 0">General agent</span>
+                                    <span v-if="item.role == 1">Agent</span>
                                 </p>
                             </td>
                             <td class="text-center">
@@ -166,9 +162,9 @@
                         <li v-for="item in totalPaginate" :key="item">
                             <span v-on:click.prevent="onCurrent(item)"
                                 v-bind:class="{ isActive: (item === current), 'text-dark': isActive == false }"
-                                class="btn-paginate pagination-link go-to has-text-orange"
-                                aria-label="Goto page 1">{{ item
-}}</span>
+                                class="btn-paginate pagination-link go-to has-text-orange" aria-label="Goto page 1">{{
+                                    item
+                                }}</span>
                         </li>
                         <li>
                             <a class="btn-paginate" @click="next"> Next </a>
@@ -311,17 +307,23 @@ export default {
                 })
         },
         onDelete(item) {
-            if (confirm("Are you sure you want to delete " + item.code)) {
-                console.log(item.id);
-                AccountUserService.delete(item.id)
-                    .then(response => {
-                        console.log(response);
-                        this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (confirm("Are you sure you want to delete " + item.code)) {
+                    console.log(item.id);
+                    AccountUserService.delete(item.id)
+                        .then(response => {
+                            console.log(response);
+                            this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
+
         }
     }
 

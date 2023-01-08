@@ -102,9 +102,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.factory.code.length < 5) {
+            } else if (this.factory.code.length < 4) {
                 this.codeError = {
-                    text: "Code must contain 5 characters",
+                    text: "Code must contain 4 characters",
                     status: true
                 }
                 this.codeSuccess = {
@@ -122,7 +122,7 @@ export default {
                     text: "",
                     status: false
                 }
-            }else if (this.factory.code.length >= 5 || this.factory.code == codeSame) {
+            }else if (this.factory.code.length >= 4 || this.factory.code == codeSame) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true

@@ -81,9 +81,8 @@
                                             </td>
                                             <td>
                                                 <p class="">
-                                                    <span v-if="item.role == 0">Admin WareHouse</span>
-                                                    <span v-if="item.role == 1">Admin Factory</span>
-                                                    <span v-if="item.role == 2">Admin Management</span>
+                                                    <span v-if="item.role == 0">General agent</span>
+                                                    <span v-if="item.role == 1">Agent</span>
                                                 </p>
                                             </td>
 
@@ -126,18 +125,16 @@
                                                 </p>
                                             </td>
                                             <td>{{ item.address }}</td>
-                                            <td>{{ item.departmentId }}</td>
                                             <td>
                                                 <p class="text-success">
                                                     <span v-if="item.status">Action</span>
                                                     <span v-if="!item.status">No Action</span>
                                                 </p>
                                             </td>
-                                            <td>
+                                                <td>
                                                 <p class="">
-                                                    <span v-if="item.role == 0">Admin WareHouse</span>
-                                                    <span v-if="item.role == 1">Admin Factory</span>
-                                                    <span v-if="item.role == 2">Admin Management</span>
+                                                    <span v-if="item.role == 0">General agent</span>
+                                                    <span v-if="item.role == 1">Agent</span>
                                                 </p>
                                             </td>
                                             <td class="text-center">
@@ -216,7 +213,7 @@
 }
 
 .btn-paginate {
-    n-inline: 5px;
+   margin-inline: 5px;
     cursor: pointer;
     border-style: groove;
     border-radius: 100%;
@@ -357,7 +354,7 @@ export default {
 
         },
         getDeleteData(data) {
-            this.t.push(data);
+            this.customer.push(data);
             console.log(data);
             this.isShowTrash = false;
             this.$forceUpdate();
@@ -377,16 +374,21 @@ export default {
             this.isShowEdit = false;
         },
         onDelete(item) {
-            if (confirm("Are you sure you want to delete " + item.code)) {
-                console.log(item.id);
-                AccountUserService.temporaryDelete(item)
-                    .then(response => {
-                        console.log(response);
-                        this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (confirm("Are you sure you want to delete " + item.code)) {
+                    console.log(item.id);
+                    AccountUserService.temporaryDelete(item)
+                        .then(response => {
+                            console.log(response);
+                            this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         }
     }

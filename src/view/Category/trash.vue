@@ -1,6 +1,6 @@
 <template>
     <div class="statbox widget box box-shadow" v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
-        <div class="row">
+        <div class="row" style="margin-top: 26px;">
             <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
                 style="margin-left: -23px;">
                 <div id="range-search_filter" class="dataTables_filter"><label><svg xmlns="http://www.w3.org/2000/svg"

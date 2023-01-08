@@ -2108,7 +2108,7 @@ textarea[readonly] {
     color: #4361ee;
     font-weight: 700;
     font-size: 13px;
-    letter-spacing: 1px;
+    /* letter-spacing: 1px; */
     text-transform: uppercase;
 }
 

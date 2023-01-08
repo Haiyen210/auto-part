@@ -99,9 +99,17 @@
                     </div>
                 </fieldset>
                 <div class="form-group row mb-4">
-                    <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Role</label>
+                    <label for="role" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Role</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
-                        <input type="text" class="form-control" id="address" placeholder="" v-model="account.role">
+                        <select class="form-control  basic" v-model="account.role" id="role"
+                            :class="{ error: roleError.status, success: roleSuccess.status }">
+                            <option value=""> Choose Role:</option>
+                            <option v-bind:value="0">General agent</option>
+                            <option v-bind:value="1">Agent</option>
+                        </select>
+                        <p class="text-error" v-if="roleError.status">{{ roleError.text }}</p>
+                        <p class="success-text" v-if="roleSuccess.status">{{ roleSuccess.text }}
+                        </p>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -454,6 +462,8 @@ export default {
                 if (this.account.gender.length == 0) {
                     this.account.gender = false;
                 }
+                let login = JSON.parse(localStorage.getItem("user"));
+                if (login.role == 2) {
                 AccountService.create(this.account)
                     .then((res) => {
                         //Perform Success Action
@@ -465,13 +475,6 @@ export default {
                         this.account.status = true;
                         this.account.gender == '' ? this.account.gender = true : this.account.gender = false;
                         console.log(this.account);
-                        // createToast({
-                        //     title: 'Success',
-                        //     description: 'Thêm mới tài khoản Success',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
                         this.$emit("ShowData", this.account);
                     })
                     .catch((error) => {
@@ -481,6 +484,9 @@ export default {
                     .finally(() => {
                         //Perform action in always
                     });
+                } else {
+                    alert("You are not authorized to perform this task");
+                }
             }
         },
     }

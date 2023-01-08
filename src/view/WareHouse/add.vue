@@ -11,7 +11,8 @@
         <div class="widget-content widget-content-area">
             <form method="post" v-on:submit.prevent="onSubmitForm">
                 <div class="form-group row mb-4">
-                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">WareHouse Code</label>
+                    <label for="exampleFormControlInput1" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">WareHouse
+                        Code</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <input type="text" class="form-control" id="code" placeholder="" v-model="warehouse.code"
                             :class="{ error: codeError.status, success: codeSuccess.status }" />
@@ -31,18 +32,19 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="form-group row mb-4">
                     <label for="hPassword" class="col-xl-2 col-sm-3 col-sm-2 col-form-label">Factory</label>
                     <div class="col-xl-6 col-lg-6 col-sm-6">
                         <select class="form-control basic" name="" id="factoryID" v-model="warehouse.factoryID">
-                            <option value="" >Choose</option>
-                            <option v-for="item in factoryes" :key="item.id" :selected="warehouse.factoryID === item.id" v-bind:value="item.id">{{ item.name }}</option>
+                            <option value="">Choose</option>
+                            <option v-for="item in factoryes" :key="item.id" :selected="warehouse.factoryID === item.id"
+                                v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                
+
                     </div>
                 </div>
-                
+
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" class="btn btn-primary mt-3">Save</button>
@@ -56,15 +58,13 @@
 <script>
 import WareHouseService from '@/services/WareHouseService';
 import FactoryService from '@/services/FactoryService';
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     data() {
         return {
             message: "",
             currentImage: undefined,
-            category: null,
             factoryes: null,
+            a:null,
             url: null,
             ID: null,
             warehouse: {
@@ -72,9 +72,8 @@ export default {
                 code: "",
                 name: "",
                 factoryID: "",
-                status: 0,
-                factorys: "",
-                
+                factoryName:"",
+                status: 1,
             },
             codeError: {
                 text: "",
@@ -103,7 +102,7 @@ export default {
         }
 
     },
-    mounted(){
+    mounted() {
         FactoryService.getAll()
             .then((res) => {
                 this.factoryes = res.data;
@@ -112,10 +111,10 @@ export default {
                 console.log(error);
 
             })
-            .finally(()=>{
+            .finally(() => {
 
             })
-        },
+    },
     methods: {
         onSubmitForm() {
             if (this.warehouse.code.length == 0) {
@@ -123,15 +122,21 @@ export default {
                     text: "Code cannot be empty",
                     status: false
                 }
-
-            } else if (this.warehouse.code.length < 5) {
+                this.codeSuccess = {
+                    text: "",
+                    status: false
+                }
+            } else if (this.warehouse.code.length < 4) {
                 this.codeError = {
-                    text: "Code must contain 5 characters",
+                    text: "Code must contain 4 characters",
+                    status: false
+                }
+                this.codeSuccess = {
+                    text: "",
                     status: false
                 }
 
-
-            } else if (this.warehouse.code.length >= 5) {
+            } else if (this.warehouse.code.length >= 4) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
@@ -149,16 +154,22 @@ export default {
 
             if (this.warehouse.name.length == 0) {
                 this.nameError = {
-                    text: "FullName cannot be empty!",
+                    text: "Warehouse name cannot be empty!",
                     status: false
                 }
-
+                this.nameError = {
+                    text: "",
+                    status: false
+                }
             } else if (this.warehouse.name.length < 6 || this.warehouse.name.length > 50) {
                 this.nameError = {
-                    text: "FullName must be between 6 and 50 characters",
+                    text: "Warehouse name must be between 6 and 50 characters",
                     status: false
                 }
-
+                this.nameError = {
+                    text: "",
+                    status: false
+                }
 
             } else if (this.warehouse.name.length > 6 || this.warehouse.name.length < 50) {
                 this.nameSuccess = {
@@ -182,7 +193,7 @@ export default {
                     status: false
                 }
 
-            
+
             } else if (this.warehouse.factoryID.length > 0) {
                 this.factoryIDSuccess = {
                     text: "Success!",
@@ -192,36 +203,38 @@ export default {
                     text: "",
                     status: false
                 }
-                
+
             } else {
                 this.factoryIDSuccess = {
                     text: "",
                     status: true
                 }
             }
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.factoryIDSuccess.status == true) {
+                    WareHouseService.create(this.warehouse)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.ID = res.data.id;
+                            this.warehouse.id = this.ID;
+                            this.warehouse.status = 1;
+                            this.warehouse.factoryName = res.data.factoryName;
+                            console.log(this.warehouse);
 
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true && this.factoryIDSuccess.status == true ) {
-                WareHouseService.create(this.warehouse)
-                    .then((res) => {
-                        //Perform Success Action
-                        this.ID = res.data.id;
-                        this.warehouse.id = this.ID;
-                        this.warehouse.status = true;
-                        this.warehouse.createdDate == Date(); 
-                        this.warehouse.modifiedDate == Date(); 
-                        console.log(this.warehouse);
-                      
-                        this.$emit("ShowData", this.warehouse);
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
+                            this.$emit("ShowData", this.warehouse);
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
-
         },
     }
 

@@ -109,8 +109,6 @@
 
 <script>
 import WareHouseService from '@/services/WareHouseService';
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     props: ['warehouse'],
 

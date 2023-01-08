@@ -256,9 +256,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.account.code.length < 5) {
+            } else if (this.account.code.length < 4) {
                 this.codeError = {
-                    text: "Account name  must contain 5 characters",
+                    text: "Account name  must contain 4 characters",
                     status: true
                 }
                 this.codeSuccess = {
@@ -266,7 +266,7 @@ export default {
                     status: false
                 }
 
-            } else if (this.account.code.length >= 5) {
+            } else if (this.account.code.length >= 4) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true

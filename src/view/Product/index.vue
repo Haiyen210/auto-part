@@ -53,14 +53,13 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Code Product</th>
+                                            <th class="text-center">Product Code</th>
                                             <th>Product Name</th>
                                             <th>Price</th>
-                                            <th>SalePrice</th>
                                             <th>Quantity</th>
                                             <th>Image</th>
-                                            <th>Category Name</th>
-                                            <th>WareHouse Name</th>
+                                            <th>Category</th>
+                                            <th>WareHouse</th>
                                             <th>Status</th>
                                             <th class="text-center">Action</th>
                                         </tr>
@@ -69,8 +68,15 @@
                                         <tr v-for="item in productFilte" :key="item.iD">
                                             <td class="text-center">{{ item.code }}</td>
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item.price }}</td>
-                                            <td>{{ item.salePrice }}</td>
+                                            <td>
+                                                <p v-if="item.salePrice > 0">
+                                                    <span style="color: red;">${{ item.salePrice }}</span> &nbsp;
+                                                    <del> ${{ item.price }}</del>
+                                                </p>
+                                                <p v-if="item.salePrice < 0">
+                                                    <span>${{ item.price }}</span>
+                                                </p>
+                                            </td>
                                             <td>{{ item.quantity }}</td>
                                             <td><img :src="'http://localhost:54195/images/' + item.images"
                                                     style="width: 100px" /></td>
@@ -78,8 +84,8 @@
                                             <td>{{ item.warehouseName }}</td>
                                             <td>
                                                 <p class="text-danger">
-                                                    <span v-if="item.status">Sout</span>
-                                                    <span v-if="!item.status">Sout out</span>
+                                                    <span v-if="item.status == true">Sout</span>
+                                                    <span v-if="item.status == false">Sout out</span>
                                                 </p>
                                             </td>
 
@@ -115,8 +121,15 @@
                                         <tr v-for="item in paginated" :key="item.id">
                                             <td class="text-center">{{ item.code }}</td>
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item.price }}</td>
-                                            <td>{{ item.salePrice }}</td>
+                                            <td>
+                                                <p v-if="item.salePrice > 0">
+                                                    <span style="color: red;">${{ item.salePrice }}</span> &nbsp;
+                                                    <del> ${{ item.price }}</del>
+                                                </p>
+                                                <p v-if="item.salePrice < 0">
+                                                    <span>${{ item.price }}</span>
+                                                </p>
+                                            </td>
                                             <td>{{ item.quantity }}</td>
                                             <td><img :src="'http://localhost:54195/images/' + item.images"
                                                     style="width: 100px" /></td>
@@ -184,14 +197,13 @@
                     </div>
                     <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
                         v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
-                            viewBox="0 0 16 16">
+                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
                             <path
                                 d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                         </svg></a>
                     <ProductEdit :product="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
                     <ProductAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                    <ProductTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
+                    <ProductTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" @ShowEdit="GetEditTrash($event)"/>
                 </div>
             </div>
         </div>
@@ -228,8 +240,6 @@ import ProductAdd from "../Product/add.vue";
 import ProductService from "@/services/ProductService";
 import ProductTrash from "../Product/trash.vue";
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
@@ -363,38 +373,28 @@ export default {
             for (let i = 0; i < this.product.length; i++) {
                 if (this.product[i].id == data.id) {
                     this.product[i] = data;
-                    this.$forceUpdate();
+                    this.$forceUpdate()
                     break;
                 }
             }
 
-            console.log(this.product);
             this.isShowEdit = false;
         },
         onDelete(item) {
-            if (confirm("Bạn có chắc muốn xóa sản phẩm " + item.code)) {
-                console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
-                ProductService.temporaryDelete(item)
-                    .then(response => {
-                        console.log(response);
-                        this.product.splice(this.product.findIndex(e => e.id == item.id), 1).push(response.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Xóa tài khoản thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
-                        // if (item.email == login.email) {
-                        //     localStorage.removeItem("user");
-                        //     window.location.href = "/login"
-                        // }
-
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (confirm("Are you sure you want to delete the product " + item.code)) {
+                    ProductService.temporaryDelete(item)
+                        .then(response => {
+                            console.log(response);
+                            this.product.splice(this.product.findIndex(e => e.id == item.id), 1).push(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         }
     }

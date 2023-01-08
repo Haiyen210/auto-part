@@ -13,7 +13,7 @@
                                         <path
                                             d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                     </svg></a>
-                                
+
                             </div>
                             <div class="col-12 col-sm-5 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
                                 style="margin-left: 191px;">
@@ -315,28 +315,25 @@ export default {
             this.isShowEdit = false;
         },
         onDelete(item) {
-            console.log(item.id);
-            if (confirm("Bạn có chắc muốn xóa department mã " + item.code)) {
-                DepartmentService.delete(item.id)
-                    .then((response) => {
-                        console.log(response);
-                        this.department
-                            .splice(
-                                this.department.findIndex((e) => e.id == item.id),
-                                1
-                            )
-                            .push(response.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Xóa department thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (confirm("Bạn có chắc muốn xóa department mã " + item.code)) {
+                    DepartmentService.delete(item.id)
+                        .then((response) => {
+                            console.log(response);
+                            this.department
+                                .splice(
+                                    this.department.findIndex((e) => e.id == item.id),
+                                    1
+                                )
+                                .push(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         },
 

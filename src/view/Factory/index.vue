@@ -318,6 +318,8 @@ export default {
             this.isShowEdit = false;
         },
         onDelete(item) {
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
             if (confirm("Are you sure you want to delete " + item.code)) {
                 console.log(item.id);
                 // let login = JSON.parse(localStorage.getItem("user"));
@@ -332,6 +334,9 @@ export default {
                         console.log(error)
                     })
             }
+        } else {
+                    alert("You are not authorized to perform this task");
+                }
         }
     }
 

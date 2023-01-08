@@ -10,7 +10,7 @@ class AccountUserService {
         return http.post("/AccountUsers", data);
     }
     update(data) {
-        return http.post(`/AccountUsers/${data.id}`, data);
+        return http.post("/AccountUsers/PutAccountUser", data);
     }
     delete(id) {
         return http.delete(`/AccountUsers/${id}`);

@@ -66,8 +66,6 @@
 </template>
 <script>
 import DepartmentService from "../../services/DepartmentService";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
 
     props: ["departments"],
@@ -128,9 +126,9 @@ export default {
                     text: "",
                     status: false,
                 };
-            } else if (this.department.code.length > 6) {
+            } else if (this.department.code.length < 5) {
                 this.codeError = {
-                    text: "Code must be least 6 characters",
+                    text: "Code must be 5 characters or more",
                     status: true,
                 };
                 this.codeSuccess = {
@@ -153,7 +151,7 @@ export default {
                         text: "",
                         status: false,
                     };
-                } else if (this.department.code.length > 0 || this.department.code.length < 6) {
+                } else if (this.department.code.length > 0 || this.department.code.length > 5) {
                     this.codeSuccess = {
                         text: "Success!",
                         status: true,
@@ -183,7 +181,7 @@ export default {
                     text: "",
                     status: false,
                 };
-            }else {
+            } else {
                 var check_exist_name = true;
                 for (var j = 0; j < this.list_departments.length; j++) {
                     if (this.department.name === this.list_departments[j].name) {
@@ -210,23 +208,28 @@ export default {
                     };
                 }
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
 
-                DepartmentService.create(this.department)
-                    .then((res) => {
-                        //Perform Success Action
-                        this.ID = res.data.id;
-                        this.department.id = this.ID;
-                        console.log(res.data);
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
-                this.$emit("ShowData", this.department);
+                    DepartmentService.create(this.department)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.ID = res.data.id;
+                            this.department.id = this.ID;
+                            console.log(res.data);
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowData", this.department);
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         },
 

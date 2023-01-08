@@ -77,12 +77,8 @@ export default {
     data() {
         return {
             message: "",
-            currentImage: undefined,
-            url: null,
             list_departments: null,
             departments: this.department,
-            ishowImage: false,
-            old: "localhost:54195/images/" + this.department.image,
             codeError: {
                 text: "",
                 status: false,
@@ -115,12 +111,6 @@ export default {
         });
     },
     methods: {
-        selectImage() {
-            this.currentImage = this.$refs.file.files.item(0);
-            this.url = URL.createObjectURL(this.currentImage);
-            this.departments.image = this.$refs.file.files.item(0).name;
-            this.ishowImage = true;
-        },
         onSubmitEditForm() {
             if (this.department.code.length == 0) {
                 this.codeError = {
@@ -128,45 +118,34 @@ export default {
                     status: true,
                 };
                 this.codeSuccess = {
-                        text: "",
-                        status: false,
-                    };
-            } else if (this.department.code.length > 6) {
+                    text: "",
+                    status: false,
+                };
+            } else if (this.department.code.length < 5) {
                 this.codeError = {
-                    text: "Code must be longest 6 characters",
+                    text: "Code must be 5 characters or more",
                     status: true,
                 };
                 this.codeSuccess = {
-                        text: "",
-                        status: false,
-                    };
+                    text: "",
+                    status: false,
+                };
+            } else if (this.department.code.length > 0 || this.department.code.length > 5) {
+                this.codeSuccess = {
+                    text: "Success!",
+                    status: true,
+                };
+                this.codeError = {
+                    text: "",
+                    status: false,
+                };
             } else {
-                var check_exist = true;
-                for (var i = 0; i < this.list_departments.length; i++) {
-                    if (this.department.code === this.list_departments[i].code) {
-                        check_exist = false;
-                    }
-                }
-                if (check_exist == false) {
-                    this.codeError = {
-                        text: "Code is exist ! Please change new !",
-                        status: true
-                    }
-                    this.codeSuccess = {
-                        text: "",
-                        status: false,
-                    };
-                } else if (this.department.code.length > 0 || this.department.code.length < 6) {
-                    this.codeSuccess = {
-                        text: "Success!",
-                        status: true,
-                    };
-                    this.codeError = {
-                        text: "",
-                        status: false,
-                    };
-                }
+                this.codeSuccess = {
+                    text: "",
+                    status: true,
+                };
             }
+
 
             if (this.department.name.length == 0) {
                 this.nameError = {
@@ -186,48 +165,42 @@ export default {
                     text: "",
                     status: false,
                 };
+            }else if (this.department.name.length > 0 || this.department.name.length < 6) {
+                this.nameSuccess = {
+                    text: "Success!",
+                    status: true,
+                };
+                this.nameError = {
+                    text: "",
+                    status: false,
+                };
             } else {
-                var check_exist_name = true;
-                for (var j = 0; j < this.list_departments.length; j++) {
-                    if (this.department.name === this.list_departments[j].name) {
-                        check_exist_name = false;
-                    }
-                }
-                if (check_exist_name == false) {
-                    this.nameError = {
-                        text: "Name is exist ! Please change new !",
-                        status: true
-                    }
-                    this.nameSuccess = {
-                        text: "",
-                        status: false,
-                    };
-                } else if (this.department.name.length > 0 || this.department.name.length < 6) {
-                    this.nameSuccess = {
-                        text: "Success!",
-                        status: true,
-                    };
-                    this.nameError = {
-                        text: "",
-                        status: false,
-                    };
-                }
+                this.nameSuccess = {
+                    text: "",
+                    status: true,
+                };
             }
-            if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
-                DepartmentService.update(this.departments)
-                    .then((res) => {
-                        //Perform Success Action
-                        this.departments = res.data;
-                        res.data.files;
-                    })
-                    .catch((error) => {
-                        // error.response.status Check status code
-                        console.log(error);
-                    })
-                    .finally(() => {
-                        //Perform action in always
-                    });
-                this.$emit("ShowEditData", this.departments);
+
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (this.codeSuccess.status == true && this.nameSuccess.status == true) {
+                    DepartmentService.update(this.departments)
+                        .then((res) => {
+                            //Perform Success Action
+                            this.departments = res.data;
+                            res.data.files;
+                        })
+                        .catch((error) => {
+                            // error.response.status Check status code
+                            console.log(error);
+                        })
+                        .finally(() => {
+                            //Perform action in always
+                        });
+                    this.$emit("ShowEditData", this.departments);
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         },
     },

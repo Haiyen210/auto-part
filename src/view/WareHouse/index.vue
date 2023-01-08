@@ -107,8 +107,8 @@
                                             <td>{{ item.name }}</td>
                                             <td>
                                                 <p class="text-success">
-                                                    <span v-if="item.status">Action</span>
-                                                    <span v-if="!item.status">No Action</span>
+                                                    <span v-if="item.status == 1">Action</span>
+                                                    <span v-if="item.status == 0">No Action</span>
                                                 </p>
                                             </td>
                                             <td> {{ item.factoryName }}</td>
@@ -223,8 +223,6 @@ import WareHouseAdd from "../WareHouse/add.vue";
 import WareHouseDetail from "../WareHouse/detail.vue";
 import WareHouseService from "@/services/WareHouseService";
 import "vue-awesome-paginate/dist/style.css";
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     name: "Index",
     components: {
@@ -360,29 +358,20 @@ export default {
         },
 
         onDelete(item) {
-            if (confirm("Bạn có chắc muốn xóa tài khoản mã " + item.code)) {
-                console.log(item.id);
-                // let login = JSON.parse(localStorage.getItem("user"));
-                WareHouseService.delete(item.id)
-                    .then(response => {
-                        console.log(response);
-                        this.warehouse.splice(this.warehouse.findIndex(e => e.id == item.id), 1).push(response.data);
-                        // createToast({
-                        //     title: 'Thành công',
-                        //     description: 'Xóa tài khoản thành công',
-                        //     type: 'success',
-                        //     timeout: 5000,
-
-                        // })
-                        // if (item.email == login.email) {
-                        //     localStorage.removeItem("user");
-                        //     window.location.href = "/login"
-                        // }
-
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
+            let login = JSON.parse(localStorage.getItem("user"));
+            if (login.role == 2) {
+                if (confirm("Bạn có chắc muốn xóa tài khoản mã " + item.code)) {
+                    WareHouseService.delete(item.id)
+                        .then(response => {
+                            console.log(response);
+                            this.warehouse.splice(this.warehouse.findIndex(e => e.id == item.id), 1).push(response.data);
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                }
+            } else {
+                alert("You are not authorized to perform this task");
             }
         }
     }

@@ -95,7 +95,7 @@ export default {
     },
 
     methods: {
-        onSubmitForm() {
+        onSubmitEditForm() {
 
             if (this.factorys.code.length == 0) {
                 this.codeError = {
@@ -106,9 +106,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.factorys.code.length < 5) {
+            } else if (this.factorys.code.length < 4) {
                 this.codeError = {
-                    text: "Code must contain 5 characters",
+                    text: "Code must contain 4 characters",
                     status: true
                 }
                 this.codeSuccess = {
@@ -116,7 +116,7 @@ export default {
                     status: false
                 }
 
-            } else if (this.factorys.code.length >= 5) {
+            } else if (this.factorys.code.length >= 4) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true

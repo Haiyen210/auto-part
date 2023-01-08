@@ -73,8 +73,6 @@
 </template>
 <script>
 import CategoryProductService from '@/services/CategoryProductService';
-// import 'mosha-vue-toastify/dist/style.css';
-// import { createToast } from 'mosha-vue-toastify';
 export default {
     props: ['category'],
 
@@ -115,7 +113,7 @@ export default {
     },
 
     methods: {
-        onSubmitForm() {
+        onSubmitEditForm() {
             if (this.categorys.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
@@ -125,9 +123,9 @@ export default {
                     text: "",
                     status: false
                 }
-            } else if (this.categorys.code.length < 5) {
+            } else if (this.categorys.code.length < 4) {
                 this.codeError = {
-                    text: "Code must contain 5 characters",
+                    text: "Code must contain 4 characters",
                     status: true
                 }
                 this.codeSuccess = {
@@ -135,7 +133,7 @@ export default {
                     status: false
                 }
 
-            } else if (this.categorys.code.length >= 5) {
+            } else if (this.categorys.code.length >= 4) {
                 this.codeSuccess = {
                     text: "Success!",
                     status: true
