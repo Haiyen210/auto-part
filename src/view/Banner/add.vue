@@ -258,6 +258,7 @@ export default {
                             this.ID = res.data.id;
                             this.banner.id = this.ID;
                             console.log(res.data);
+                            this.$emit("ShowData", this.banner);
                         })
                         .catch((error) => {
                             // error.response.status Check status code
@@ -266,7 +267,7 @@ export default {
                         .finally(() => {
                             //Perform action in always
                         });
-                    this.$emit("ShowData", this.banner);
+                   
                 } else {
                     alert("You are not authorized to perform this task");
                 }

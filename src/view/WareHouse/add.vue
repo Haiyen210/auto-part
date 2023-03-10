@@ -41,7 +41,11 @@
                             <option v-for="item in factoryes" :key="item.id" :selected="warehouse.factoryID === item.id"
                                 v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-
+                        <p class="text-error" v-if="factoryIDError.status">{{ factoryIDError.text }}</p>
+                        <p class="success-text" v-if="factoryIDSuccess.status">{{ factoryIDSuccess.text }}
+                        </p>
+                        <p class="text-error" v-if="response">FactoryId already exists !
+                        </p>
                     </div>
                 </div>
 
@@ -67,6 +71,7 @@ export default {
             a:null,
             url: null,
             ID: null,
+            warehouses:null,
             warehouse: {
                 id: null,
                 code: "",
@@ -114,13 +119,32 @@ export default {
             .finally(() => {
 
             })
+            WareHouseService.getAll()
+            .then((res) => {
+                this.warehouses = res.data;
+            })
+            .catch((error) => {
+                console.log(error);
+
+            })
+            .finally(() => {
+
+            })
     },
     methods: {
         onSubmitForm() {
+            var FactoryIdSame;
+            for (let i = 0; i < this.warehouses.length; i++) {
+                const element = this.warehouses[i];
+                if(this.warehouse.factoryID == element.factoryID){
+                    FactoryIdSame = element.factoryID;
+                    break;
+                }
+            }
             if (this.warehouse.code.length == 0) {
                 this.codeError = {
                     text: "Code cannot be empty",
-                    status: false
+                    status: true
                 }
                 this.codeSuccess = {
                     text: "",
@@ -129,7 +153,7 @@ export default {
             } else if (this.warehouse.code.length < 4) {
                 this.codeError = {
                     text: "Code must contain 4 characters",
-                    status: false
+                    status: true
                 }
                 this.codeSuccess = {
                     text: "",
@@ -155,7 +179,7 @@ export default {
             if (this.warehouse.name.length == 0) {
                 this.nameError = {
                     text: "Warehouse name cannot be empty!",
-                    status: false
+                    status: true
                 }
                 this.nameError = {
                     text: "",
@@ -164,7 +188,7 @@ export default {
             } else if (this.warehouse.name.length < 6 || this.warehouse.name.length > 50) {
                 this.nameError = {
                     text: "Warehouse name must be between 6 and 50 characters",
-                    status: false
+                    status: true
                 }
                 this.nameError = {
                     text: "",
@@ -187,14 +211,18 @@ export default {
                 }
             }
 
-            if (this.warehouse.factoryID.length == 0) {
-                this.factorysError = {
-                    text: "factory cannot be empty",
+        if(this.warehouse.factoryID == FactoryIdSame)
+            {
+                this.factoryIDError = {
+                    text: "FactoryId already exists !",
+                    status: true
+                }
+                this.factoryIDSuccess = {
+                    text: "",
                     status: false
                 }
+            } else if (this.warehouse.factoryID != FactoryIdSame) {
 
-
-            } else if (this.warehouse.factoryID.length > 0) {
                 this.factoryIDSuccess = {
                     text: "Success!",
                     status: true
@@ -220,12 +248,9 @@ export default {
                             this.warehouse.id = this.ID;
                             this.warehouse.status = 1;
                             this.warehouse.factoryName = res.data.factoryName;
-                            console.log(this.warehouse);
-
                             this.$emit("ShowData", this.warehouse);
                         })
                         .catch((error) => {
-                            // error.response.status Check status code
                             console.log(error);
                         })
                         .finally(() => {

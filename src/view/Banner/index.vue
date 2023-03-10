@@ -54,7 +54,7 @@
                                                 <td class="text-center">{{ item.code }}</td>
                                                 <td>{{ item.name }}</td>
                                                 <td>
-                                                    <img v-bind:src="'http://localhost:54195/images/'+item.image"
+                                                    <img :src="'http://localhost:54195/images/'+item.image"
                                                         style="width: 100px" />
                                                 </td>
                                                 <td>

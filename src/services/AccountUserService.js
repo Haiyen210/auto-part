@@ -24,7 +24,9 @@ class AccountUserService {
     repeat(data) {
         return http.post(`/AccountUsers/RepeatAccountUsers`, data);
     }
-
+    getOrderDebit() {
+        return http.get("/AccountUsers/GetOrderDebit");
+    }
 
 }
 export default new AccountUserService();

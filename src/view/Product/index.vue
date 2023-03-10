@@ -73,7 +73,7 @@
                                                     <span style="color: red;">${{ item.salePrice }}</span> &nbsp;
                                                     <del> ${{ item.price }}</del>
                                                 </p>
-                                                <p v-if="item.salePrice < 0">
+                                                <p v-if="item.salePrice <= 0">
                                                     <span>${{ item.price }}</span>
                                                 </p>
                                             </td>
@@ -126,7 +126,7 @@
                                                     <span style="color: red;">${{ item.salePrice }}</span> &nbsp;
                                                     <del> ${{ item.price }}</del>
                                                 </p>
-                                                <p v-if="item.salePrice < 0">
+                                                <p v-if="item.salePrice <= 0">
                                                     <span>${{ item.price }}</span>
                                                 </p>
                                             </td>
@@ -197,13 +197,15 @@
                     </div>
                     <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
                         v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                         </svg></a>
                     <ProductEdit :product="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
                     <ProductAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                    <ProductTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" @ShowEdit="GetEditTrash($event)"/>
+                    <ProductTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)"
+                        @ShowEdit="GetEditTrash($event)" />
                 </div>
             </div>
         </div>

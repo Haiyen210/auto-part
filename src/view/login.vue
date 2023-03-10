@@ -8,6 +8,7 @@
                         <h1 class="">Sign In</h1>
                         <p class="">Log in to your account to continue.</p>
                         <p class="text-error" v-if="LogginFalse.status" style="color:red">{{ LogginFalse.text }}</p>
+                        <p class="text-error" v-if="LogginTrue.status"></p>
                         <form class="text-left" method="post" v-on:submit.prevent="Submit">
                             <div class="form">
 
@@ -127,6 +128,10 @@ export default {
             LogginFalse: {
                 text: "",
                 status: false,
+            },
+            LogginTrue: {
+                text: "",
+                status: false,
             }
 
         }
@@ -139,11 +144,19 @@ export default {
                     text: "Email cannot be blank",
                     status: true,
                 };
+                this.LogginTrue = {
+                    text: "",
+                    status: true
+                }
             } else if (!regex.test(this.user.email)) {
                 this.emailError = {
                     text: "Email cannot be blank!!!!",
                     status: true,
                 };
+                this.LogginTrue = {
+                    text: "",
+                    status: true
+                }
             } else if (regex.test(this.user.email)) {
                 this.emailSuccess = {
                     text: "",
@@ -165,7 +178,10 @@ export default {
                     text: "Password can not be blank",
                     status: true
                 }
-
+                this.LogginTrue = {
+                    text: "",
+                    status: true
+                }
             } else if (this.user.password.length > 0) {
                 this.passwordSuccess = {
                     text: "",
@@ -194,10 +210,22 @@ export default {
                             localStorage.setItem('user', JSON.stringify(users))
                             axios.defaults.headers.common['Authorization'] = "Bearer" + token
                             window.location.href = "/";
+                            this.LogginTrue = {
+                                text: "",
+                                status: true
+                            }
+                            this.LogginFalse = {
+                                text: "",
+                                status: false
+                            }
                         } else {
                             this.LogginFalse = {
                                 text: "Email or password is incorrect",
                                 status: true
+                            }
+                            this.LogginTrue = {
+                                text: "",
+                                status: false
                             }
                         }
 
@@ -205,8 +233,12 @@ export default {
                         localStorage.removeItem('token');
                         console.log(err);
                         this.LogginFalse = {
-                                text: "Email or password is incorrect",
-                                status: true
+                            text: "Email or password is incorrect",
+                            status: true
+                        }
+                        this.LogginTrue = {
+                                text: "",
+                                status: false
                             }
                     })
             }

@@ -53,7 +53,7 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Code</th>
+                                                <th class="text-center">Account Name</th>
                                                 <th>FullName</th>
                                                 <th>Gender</th>
                                                 <th>Address</th>

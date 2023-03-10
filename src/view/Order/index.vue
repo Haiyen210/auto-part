@@ -6,29 +6,17 @@
             <div class="row layout-top-spacing">
                 <div id="tableProgress" class="col-lg-12 col-12 layout-spacing">
 
-                    <div class="statbox widget box box-shadow"
-                        v-if="isShowEdit == false && isShowAdd == false && isShowTrash == false">
+                    <div class="statbox widget box box-shadow" v-if="isShowEdit == false">
                         <div class="row" style="margin-top: 26px;">
-                            <div class="col-12 col-sm-5 d-flex justify-content-sm-start justify-content-center">
-                                <a type="submit" class="btn btn-success mt-3" v-on:click.prevent="onAdd"
-                                    style="margin-left: 24px;">Add New<svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                        height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                        <path
-                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                                    </svg></a>
-                                <a style="margin-left: 5%;" type="submit" class="btn btn-success mt-3"
-                                    v-on:click.prevent="onTrash">Trash<svg viewBox="-61 0 512 512"
-                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                                        <path
-                                            d="m255 0h-120c-24.8125 0-45 20.1875-45 45v15h-60c-16.570312 0-30 13.429688-30 30v30c0 16.566406 13.429688 30 30 30h92.566406c25.570313 0 36.390625-19.378906 44.25-25.605469 2.796875-2.796875 6.664063-4.394531 10.605469-4.394531h182.578125c16.570312 0 30-13.433594 30-30 0-16.570312-13.429688-30-30-30h-60v-15c0-24.8125-20.1875-45-45-45zm15 60h-150v-15c0-8.277344 6.722656-15 15-15h120c8.277344 0 15 6.722656 15 15zm0 0" />
-                                        <path
-                                            d="m360 482c0 16.570312-13.429688 30-30 30s-30-13.429688-30-30 13.429688-30 30-30 30 13.429688 30 30zm0 0" />
-                                        <path
-                                            d="m330 422c1.40625 0 2.726562.320312 4.113281.414062l24.589844-272.414062h-175.070313c-3.925781 2.851562-22.941406 30-61.070312 30h-88.65625l23.867188 290.707031c1.90625 23.15625 21.605468 41.292969 44.855468 41.292969h175.714844c-5.167969-8.859375-8.34375-19.023438-8.34375-30 0-33.089844 26.910156-60 60-60zm-68.816406-40.707031c-6.273438 5.359375-15.761719 4.671875-21.140625-1.65625-5.390625-6.285157-4.644531-15.761719 1.65625-21.136719 4.832031-4.132812 7.472656-12.070312 3.179687-19.21875l-37.019531-61.6875c-3.9375-6.574219-10.3125-7.277344-12.859375-7.277344s-8.921875.703125-12.859375 7.277344l-37.019531 61.6875c-5.976563 9.96875 1.15625 22.71875 12.863281 22.71875h15.804687l-4.394531-4.394531c-5.859375-5.859375-5.859375-15.351563 0-21.210938s15.351563-5.859375 21.210938 0l29.980469 29.980469c5.835937 5.820312 5.875 15.390625 0 21.25l-29.980469 29.980469c-5.859375 5.859375-15.351563 5.859375-21.210938 0s-5.859375-15.351563 0-21.210938l4.394531-4.394531h-15.804687c-34.972656 0-56.597656-38.125-38.585937-68.160156l37.015624-61.683594c8.203126-13.683594 22.632813-21.839844 38.585938-21.839844s30.382812 8.15625 38.585938 21.839844l37.015624 61.683594c11.351563 18.925781 7.394532 43.082031-9.417968 57.453125zm0 0" />
-                                    </svg></a>
-                            </div>
-                            <div class="col-12 col-sm-5 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
-                                style="margin-left: 191px;">
+
+                            <div class="col-12 col-sm-12 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3"
+                                style="margin-left: -23px;">
+                                <select name="" v-model="sortatoz" @change="sortItems"
+                                    style="margin-right: 34px;width: 158px;height: 40px;margin-top: 7px;border: 1px solid #bfc9d4;">
+                                    <option value="">Sort by name</option>
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Decrease</option>
+                                </select>
                                 <div id="range-search_filter" class="dataTables_filter"><label><svg
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -44,7 +32,7 @@
                         <div class="widget-header">
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>Customer Management</h4>
+                                    <h4>Order Management</h4>
                                 </div>
                             </div>
                         </div>
@@ -53,39 +41,80 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Account Name</th>
-                                            <th>FullName</th>
-                                            <th>Gender</th>
-                                            <th>Address</th>
+                                            <th class="text-center">Order Code</th>
+                                            <th>Order Name</th>
+                                            <th>Order Date</th>
                                             <th>Status</th>
-                                            <th>Role</th>
+                                            <th>Total Price</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="query">
-                                        <tr v-for="item in customerFilte" :key="item.id">
+                                        <tr v-for="item in orderFilte" :key="item.iD">
                                             <td class="text-center">{{ item.code }}</td>
                                             <td>{{ item.name }}</td>
+                                            <td>{{ format_date(item.createdDate) }}</td>
                                             <td>
-                                                <p class="text-danger">
-                                                    <span v-if="item.gender">FeMale</span>
-                                                    <span v-if="!item.gender">Male</span>
-                                                </p>
+                                                <span class="badge badge-warning" v-if="item.status == 0">Pending</span>
+                                                <span class="badge badge-info" v-if="item.status == 1">Approved</span>
+                                                <span class="badge badge-primary"
+                                                    v-if="item.status == 2">Delivering</span>
+                                                <span class="badge badge-success" v-if="item.status == 3">Successful
+                                                    Delivery</span>
+                                                <span class="badge badge-danger"
+                                                    v-if="item.status == 4">Cancelled</span>
+                                                <span class="badge badge-dark" v-if="item.status == 5">Returns</span>
+                                                <span class="badge badge-warning" v-if="item.status == 6"> Payment
+                                                    approval</span>
                                             </td>
-                                            <td>{{ item.address }}</td>
+                                            <td>${{ formatPrice(item.totalAmount) }}</td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                                                    title="" data-original-title="Edit" style="padding: 20px;"
+                                                    v-on:click="onEdit(item)"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" class="feather feather-edit-2">
+                                                        <path
+                                                            d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
+                                                        </path>
+                                                    </svg></a>
+                                                <a href="javascript:void(0);" data-toggle="tooltip"
+                                                    v-on:click.stop.prevent="onDelete(item)" data-placement="top"
+                                                    title="" data-original-title="Delete"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="feather feather-trash-2">
+                                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                                        <path
+                                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                        </path>
+                                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                                    </svg></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else-if="sortedItems">
+                                        <tr v-for="(item, index) in sortedItems" :key="index">
+                                            <td class="text-center">{{ item.code }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ format_date(item.createdDate) }}</td>
                                             <td>
-                                                <p class="text-success">
-                                                    <span v-if="item.status">Action</span>
-                                                    <span v-if="!item.status">No Action</span>
-                                                </p>
+                                                <span class="badge badge-warning" v-if="item.status == 0">Pending</span>
+                                                <span class="badge badge-info" v-if="item.status == 1">Approved</span>
+                                                <span class="badge badge-primary"
+                                                    v-if="item.status == 2">Delivering</span>
+                                                <span class="badge badge-success" v-if="item.status == 3">Successful
+                                                    Delivery</span>
+                                                <span class="badge badge-danger"
+                                                    v-if="item.status == 4">Cancelled</span>
+                                                <span class="badge badge-dark" v-if="item.status == 5">Returns</span>
+                                                <span class="badge badge-warning" v-if="item.status == 6"> Payment
+                                                    approval</span>
                                             </td>
-                                            <td>
-                                                <p class="">
-                                                    <span v-if="item.role == 0">General agent</span>
-                                                    <span v-if="item.role == 1">Agent</span>
-                                                </p>
-                                            </td>
-
+                                            <td>${{ formatPrice(item.totalAmount) }}</td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
                                                     title="" data-original-title="Edit" style="padding: 20px;"
@@ -118,25 +147,22 @@
                                         <tr v-for="item in paginated" :key="item.id">
                                             <td class="text-center">{{ item.code }}</td>
                                             <td>{{ item.name }}</td>
+                                            <td>{{ format_date(item.createdDate) }}</td>
                                             <td>
-                                                <p class="text-danger">
-                                                    <span v-if="item.gender">FeMale</span>
-                                                    <span v-if="!item.gender">Male</span>
-                                                </p>
+                                                <span class="badge badge-warning" v-if="item.status == 0">Pending</span>
+                                                <span class="badge badge-info" v-if="item.status == 1">Approved</span>
+                                                <span class="badge badge-primary"
+                                                    v-if="item.status == 2">Delivering</span>
+                                                <span class="badge badge-success" v-if="item.status == 3">Successful
+                                                    Delivery</span>
+                                                <span class="badge badge-danger"
+                                                    v-if="item.status == 4">Cancelled</span>
+                                                <span class="badge badge-dark" v-if="item.status == 5">Returns</span>
+                                                <span class="badge badge-warning" v-if="item.status == 6"> Payment
+                                                    approval</span>
                                             </td>
-                                            <td>{{ item.address }}</td>
-                                            <td>
-                                                <p class="text-success">
-                                                    <span v-if="item.status">Action</span>
-                                                    <span v-if="!item.status">No Action</span>
-                                                </p>
-                                            </td>
-                                                <td>
-                                                <p class="">
-                                                    <span v-if="item.role == 0">General agent</span>
-                                                    <span v-if="item.role == 1">Agent</span>
-                                                </p>
-                                            </td>
+                                            <td>${{ formatPrice(item.totalAmount) }}</td>
+
                                             <td class="text-center">
                                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
                                                     title="" data-original-title="Edit" style="padding: 20px;"
@@ -148,9 +174,9 @@
                                                             d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z">
                                                         </path>
                                                     </svg></a>
-                                                <a href="javascript:void(0);" data-toggle="tooltip"
-                                                    v-on:click.stop.prevent="onDelete(item)" data-placement="top"
-                                                    title="" data-original-title="Delete"><svg
+                                                <a v-if="item.status == 4" href="javascript:void(0);"
+                                                    data-toggle="tooltip" v-on:click.stop.prevent="onDelete(item)"
+                                                    data-placement="top" title="" data-original-title="Delete"><svg
                                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -192,20 +218,19 @@
                     </div>
                     <a href="" v-if="isShowEdit == true || isShowAdd == true || isShowTrash == true"
                         v-on:click.prevent="back_to"><svg xmlns="http://www.w3.org/2000/svg" width="16" style="width: 32px;
-                            height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
+                                height: 32px;" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
                             viewBox="0 0 16 16">
                             <path
                                 d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
                         </svg></a>
-                    <CustomerEdit :customer="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
-                    <CustomerAdd v-if="isShowAdd == true" @ShowData="getData($event)" />
-                    <CustomerTrash v-if="isShowTrash == true" @ShowDeleteData="getDeleteData($event)" />
-
+                    <EditOrder :order="showEdit" v-if="isShowEdit == true" @ShowEditData="getEdit($event)" />
                 </div>
             </div>
         </div>
     </div>
+
 </template>
+
 <style>
 .pagination-list {
     list-style: none;
@@ -213,7 +238,7 @@
 }
 
 .btn-paginate {
-   margin-inline: 5px;
+    margin-inline: 5px;
     cursor: pointer;
     border-style: groove;
     border-radius: 100%;
@@ -228,37 +253,35 @@
     color: #ffff;
 }
 </style>
+
 <script>
-import CustomerEdit from "../AccountUser/edit.vue";
-import CustomerAdd from "../AccountUser/add.vue";
-import AccountUserService from "@/services/AccountUserService.js";
 import "vue-awesome-paginate/dist/style.css";
-import CustomerTrash from "@/view/AccountUser/trash.vue"
+import EditOrder from "@/view/Order/edit.vue"
+import OrderServices from '@/services/OrderServices';
+import moment from 'moment'
+import OrderDetailService from '@/services/OrderDetailService';
 export default {
     name: "Index",
     components: {
-        CustomerAdd,
-        CustomerEdit,
-        CustomerTrash
+        EditOrder
     },
     data() {
         return {
-            customer: null,
+            order: null,
             showEdit: null,
             isShowEdit: false,
-            isShowAdd: false,
-            isShowTrash: false,
-            showTrash: null,
             query: "",
             current: 1,
             pageSize: 5,
-            isActive: false
+            isActive: false,
+            sortatoz :""
         }
     },
+
     created() {
-        AccountUserService.getAll()
+        OrderServices.getAll()
             .then((res) => {
-                this.customer = res.data;
+                this.order = res.data;
                 console.log(res);
             })
             .catch((error) => {
@@ -269,21 +292,22 @@ export default {
             })
 
     },
+
     computed: {
         resultCount() {
-            return this.customer && this.customer.length
+            return this.order && this.order.length
         },
-        customerFilte() {
+        orderFilte() {
             if (this.query) {
-                return this.customer.filter((customer) => {
+                return this.order.filter((order) => {
                     return (
-                        customer.name
+                        order.name
                             .toLowerCase()
                             .indexOf(this.query.toLowerCase()) != -1
                     )
                 })
             } else {
-                return this.customer;
+                return this.order;
             }
 
         },
@@ -303,15 +327,33 @@ export default {
         paginated() {
             console.log(this.resultCount);
             if (this.resultCount > 5) {
-                return this.customer.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+                return this.order.slice(this.indexStart, this.indexEnd, this.totalPaginate);
+            } else {
+                return this.order;
             }
-            else {
-                return this.customer;
-            }
-        }
+        },
+        sortedItems() {
+            return this.order;
+        },
 
     },
+
     methods: {
+        sortItems() {
+            if (this.sortatoz === "asc") {
+                return this.order.sort((a, b) => (a.name > b.name ? 1 : -1));
+            } else {
+                return this.order.sort((a, b) => (a.name > b.name ? -1 : 1));
+            }
+        },
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('DD-MM-YYYY')
+            }
+        },
+        formatPrice(value) {
+            return new Intl.NumberFormat('en-US').format(value);
+        },
         onCurrent(item) {
 
             this.isActive = true
@@ -336,56 +378,47 @@ export default {
             console.log(data);
         },
         back_to() {
-            this.isShowEdit = false,
-                this.isShowAdd = false,
-                this.isShowTrash = false
-        },
-        onAdd() {
-            this.isShowAdd = true
+            this.isShowEdit = false
         },
         onTrash() {
             this.isShowTrash = true
         },
         getData(data) {
-            this.customer.push(data);
+            this.order.push(data);
             console.log(data);
             this.isShowAdd = false;
             this.$forceUpdate();
 
         },
-        getDeleteData(data) {
-            this.customer.push(data);
-            console.log(data);
-            this.isShowTrash = false;
-            this.$forceUpdate();
-
-        },
-
         getEdit(data) {
-            for (let i = 0; i < this.customer.length; i++) {
-                if (this.customer[i].id == data.id) {
-                    this.customer[i] = data;
-                    this.$forceUpdate();
+            for (let i = 0; i < this.order.length; i++) {
+                if (this.order[i].id == data.id) {
+                    this.order[i] = data;
+                    this.$forceUpdate()
                     break;
                 }
             }
 
-            console.log(this.customer);
             this.isShowEdit = false;
         },
         onDelete(item) {
             let login = JSON.parse(localStorage.getItem("user"));
             if (login.role == 2) {
-                if (confirm("Are you sure you want to delete " + item.code)) {
-                    console.log(item.id);
-                    AccountUserService.temporaryDelete(item)
-                        .then(response => {
-                            console.log(response);
-                            this.customer.splice(this.customer.findIndex(e => e.id == item.id), 1).push(response.data);
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        })
+                if (confirm("Are you sure you want to delete the product " + item.code)) {
+                    OrderDetailService.delete(item.id).then((res) => {
+                        console.log(res);
+                        OrderServices.delete(item.id)
+                            .then(response => {
+                                console.log(response);
+                                this.order.splice(this.order.findIndex(e => e.id == item.id), 1).push(response.data);
+                            })
+                            .catch(function (error) {
+                                console.log(error)
+                            })
+                    }).catch((error) => {
+                        console.log(error);
+                    }).finally(() => { })
+
                 }
             } else {
                 alert("You are not authorized to perform this task");

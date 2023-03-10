@@ -9,6 +9,9 @@ import AccountUser from "./view/AccountUser/index";
 import Product from "./view/Product/index";
 import Login from "./view/login";
 import Home from "./view/home";
+import Order from "./view/Order/index";
+import Returns from "./view/Returns/index";
+import Debits from "./view/Returns/order_debit";
 const routes = [{
         path: "/",
         name: "Home",
@@ -66,7 +69,21 @@ const routes = [{
         name: "product",
         component: Product,
     },
-
+    {
+        path: "/order-manager",
+        name: "order",
+        component: Order,
+    },
+    {
+        path: "/returns",
+        name: "returns",
+        component: Returns,
+    },
+    {
+        path: "/debits",
+        name: "debits",
+        component: Debits,
+    }
 ];
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
